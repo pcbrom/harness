@@ -21,6 +21,42 @@ audit gate before execution.
 This is the second package of the `r-cs-packages` family, after
 [gpumetropolis](https://github.com/pcbrom/gpumetropolis).
 
+## Why use it
+
+For several years the most capable agentic coding tools reached R users first
+as dedicated editors or as extensions for general-purpose IDEs. That path moved
+part of the R workflow out of RStudio, into an environment built around other
+languages. `harness` reverses the move. Modern command-line coding agents are
+editor-agnostic: they run in any terminal, including the RStudio terminal tab.
+The package wires them there, anchored in the project directory, while the
+console, the plots, the environment pane and the data viewer stay where the R
+user already works. The agentic session and the analytical session share one
+window again.
+
+Three properties separate this from opening a coder in a bare terminal:
+
+- Role curation. Instead of a generic chat, the agent receives the subset of
+  community skills, the system prompt and the folder layout that fit a
+  professional role, so its output matches the task. A statistician and a
+  package maintainer get different skills, different conventions and different
+  output folders from the same command.
+- Audit-first execution. The agent writes scripts into the role's layout folders
+  and never runs them. The user runs every script from the console with
+  `source()`. The human gate is the design, not a restriction: nothing the agent
+  produces reaches the session state until a person reads it and chooses to run
+  it.
+- One configuration, many coders. The same role drives any supported coder
+  through its adapter. Switching from one command-line agent to another does not
+  change the role, the skills or the folder convention; only the launch command
+  changes.
+
+The case for staying in RStudio is therefore concrete rather than nostalgic: the
+R-native environment hosts the agent in-place, adds role-aware curation that a
+generic terminal session lacks, and enforces a review step before execution. The
+package competes with neither RStudio's own assistants nor the command-line
+coders it launches; it positions the agent inside the R workflow and curates it
+for the work at hand.
+
 ## Installation
 
 The development version can be installed from GitHub:
