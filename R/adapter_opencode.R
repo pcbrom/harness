@@ -1,7 +1,33 @@
 # opencode adapter. opencode reads a project-scoped opencode.json and the
-# AGENTS.md instructions file. This adapter writes the harness block into
-# opencode.json (preserving existing keys), points opencode's instructions at
-# the role prompt, and links the curated skills under .opencode/skills.
+# AGENTS.md instructions file. opencode validates opencode.json against its
+# schema and rejects unknown keys, so this adapter writes only valid keys:
+# it points opencode's instructions at the role prompt and links the curated
+# skills under .opencode/skills. Existing user keys are preserved.
+
+# Write opencode.json with only valid keys, preserving any existing user keys.
+# Ensures the schema and that the role prompt is listed in instructions, and
+# strips a `harness` key left by earlier versions of this package.
+opencode_write_config <- function(path, prompt_rel) {
+  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
+  current <- list()
+  if (file.exists(path)) {
+    current <- tryCatch(
+      jsonlite::read_json(path, simplifyVector = FALSE),
+      error = function(e) list()
+    )
+    if (!is.list(current)) {
+      current <- list()
+    }
+  }
+  current$harness <- NULL
+  current[["$schema"]] <- "https://opencode.ai/config.json"
+  instructions <- unique(c(
+    as.character(unlist(current$instructions)), prompt_rel
+  ))
+  current$instructions <- as.list(instructions)
+  jsonlite::write_json(current, path, auto_unbox = TRUE, pretty = TRUE, null = "null")
+  path
+}
 
 adapter_opencode <- function() {
   list(
@@ -25,20 +51,13 @@ adapter_opencode <- function() {
         harness$skills, file.path(config_home, ".opencode", "skills"), cs_path
       )
       prompt_rel <- harness_write_agents(harness, project_dir, ".opencode")
-      block <- harness_config_block(
-        harness, project_dir, links$linked, prompt_rel
-      )
-      settings_path <- harness_write_json_config(
-        file.path(config_home, "opencode.json"), block,
-        extra = list(
-          "$schema" = "https://opencode.ai/config.json",
-          instructions = list(prompt_rel)
-        )
+      config_path <- opencode_write_config(
+        file.path(config_home, "opencode.json"), prompt_rel
       )
       list(
         adapter = "opencode",
         config_home = config_home,
-        settings_path = settings_path,
+        config_path = config_path,
         prompt_file = file.path(project_dir, prompt_rel),
         skills_root = links$skills_root,
         skills_linked = links$linked,

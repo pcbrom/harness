@@ -20,7 +20,7 @@ test_that("build_config writes settings, links present skills, reports missing",
     role("data-scientist"), proj,
     opts = list(config_home = home, skills_path = root)
   )
-  expect_true(file.exists(cfg$settings_path))
+  expect_true(file.exists(cfg$prompt_file))
   expect_true(all(c("dplyr", "ggplot2", "tidyr", "broom") %in% cfg$skills_linked))
   expect_true("gtsummary" %in% cfg$skills_missing)
   # linked skills resolve to a SKILL.md through the symlink
@@ -28,7 +28,7 @@ test_that("build_config writes settings, links present skills, reports missing",
   expect_true(file.exists(linked))
 })
 
-test_that("settings.json merge preserves unrelated user keys", {
+test_that("the claude adapter does not modify settings.json", {
   root <- make_fake_checkout(c("dplyr"))
   home <- make_fake_project()
   proj <- make_fake_project()
@@ -38,15 +38,15 @@ test_that("settings.json merge preserves unrelated user keys", {
     file.path(home, "settings.json"),
     auto_unbox = TRUE, pretty = TRUE
   )
+  before <- readLines(file.path(home, "settings.json"))
   ad <- get_adapter("claude")
-  ad$build_config(
+  cfg <- ad$build_config(
     role("data-scientist"), proj,
     opts = list(config_home = home, skills_path = root)
   )
-  settings <- jsonlite::read_json(file.path(home, "settings.json"))
-  expect_identical(settings$theme, "dark")
-  expect_identical(settings$harness$role, "data-scientist")
-  expect_identical(settings$harness$execution_policy, "manual")
+  # settings.json is left byte-for-byte unchanged
+  expect_identical(readLines(file.path(home, "settings.json")), before)
+  expect_true(is.na(cfg$config_path))
 })
 
 test_that("build_config writes the role prompt into the project .claude dir", {

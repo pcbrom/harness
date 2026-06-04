@@ -167,7 +167,10 @@ spawn_external <- function(emulator, shell_cmd, project_dir) {
 print.harness_launch <- function(x, ...) {
   cat(sprintf("<harness launch> %s via %s\n", x$role, x$adapter))
   cat(sprintf("  project: %s\n", x$project_dir))
-  cat(sprintf("  settings: %s\n", x$config$settings_path))
+  cat(sprintf("  prompt: %s\n", x$config$prompt_file))
+  if (!is.na(x$config$config_path)) {
+    cat(sprintf("  config: %s\n", x$config$config_path))
+  }
   cat(sprintf("  skills linked: %d", length(x$config$skills_linked)))
   if (length(x$config$skills_missing) > 0L) {
     cat(sprintf(" (%d missing in checkout)", length(x$config$skills_missing)))

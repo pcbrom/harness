@@ -1,7 +1,7 @@
-# codex adapter. codex reads a project .codex directory and the AGENTS.md
-# instructions file. This adapter writes the harness block into
-# .codex/config.json (preserving existing keys), writes the role prompt to
-# AGENTS.md, and links the curated skills under .codex/skills.
+# codex adapter. codex reads the AGENTS.md instructions file and a project
+# .codex directory. This adapter writes the role prompt to AGENTS.md and links
+# the curated skills under .codex/skills. It does not write a config file with
+# package-specific keys, to avoid disturbing codex configuration.
 
 adapter_codex <- function() {
   list(
@@ -25,16 +25,10 @@ adapter_codex <- function() {
         harness$skills, file.path(config_home, "skills"), cs_path
       )
       prompt_rel <- harness_write_agents(harness, project_dir, ".codex")
-      block <- harness_config_block(
-        harness, project_dir, links$linked, prompt_rel
-      )
-      settings_path <- harness_write_json_config(
-        file.path(config_home, "config.json"), block
-      )
       list(
         adapter = "codex",
         config_home = config_home,
-        settings_path = settings_path,
+        config_path = NA_character_,
         prompt_file = file.path(project_dir, prompt_rel),
         skills_root = links$skills_root,
         skills_linked = links$linked,

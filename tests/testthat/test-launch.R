@@ -10,7 +10,7 @@ test_that("dry_run configures the session without opening a terminal", {
   expect_true(res$dry_run)
   expect_false(res$spawned)
   expect_identical(res$role, "data-scientist")
-  expect_true(file.exists(res$config$settings_path))
+  expect_true(file.exists(res$config$prompt_file))
   expect_true(dir.exists(file.path(proj, "analysis", "scripts")))
 })
 

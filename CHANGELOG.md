@@ -5,6 +5,19 @@ versioning.
 
 ## [Unreleased]
 
+### Fixed
+
+- Adapters no longer write a package-specific block into the coder's own
+  configuration. opencode validates `opencode.json` against its schema and
+  rejects unknown keys, which broke startup; the opencode config now carries
+  only valid keys (`$schema` and `instructions`) and preserves existing user
+  keys. The claude adapter no longer modifies `settings.json` at all, since the
+  coder needs nothing there and rewriting a user's global settings risks
+  disturbing unrelated configuration. The codex adapter writes no config file
+  with package-specific keys. The role prompt and the linked skills are
+  unchanged.
+
+
 ### Phase 1 (base architecture, 4 harnesses, claude adapter)
 
 Added:

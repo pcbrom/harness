@@ -67,20 +67,6 @@ harness_link_skills <- function(skills, skills_root, cs_path) {
        missing = missing, conflict = conflict)
 }
 
-# The namespaced harness block merged into a coder config file.
-harness_config_block <- function(h, project_dir, skills_linked, prompt_rel) {
-  list(
-    role = h$name,
-    version = h$version %||% "0.0.0",
-    generated_by = "harness R package",
-    generated_at = format(Sys.time(), "%Y-%m-%dT%H:%M:%S%z"),
-    project_dir = project_dir,
-    execution_policy = "manual",
-    skills = as.list(skills_linked),
-    prompt_file = prompt_rel
-  )
-}
-
 # The role prompt body, including the manual-execution policy and the
 # decision-log convention. Both sections are appended to every role's own
 # system prompt, so they hold for all roles and all adapters.
@@ -129,29 +115,6 @@ harness_write_agents <- function(h, project_dir, alt_dir) {
   file.path(alt_dir, paste0("harness-", h$name, ".md"))
 }
 
-# Merge a harness block into a JSON config file, preserving existing keys, and
-# write it back. extra is an optional named list of keys to set as well.
-harness_write_json_config <- function(path, block, extra = list()) {
-  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
-  current <- list()
-  if (file.exists(path)) {
-    current <- tryCatch(
-      jsonlite::read_json(path, simplifyVector = FALSE),
-      error = function(e) list()
-    )
-    if (!is.list(current)) {
-      current <- list()
-    }
-  }
-  for (nm in names(extra)) {
-    current[[nm]] <- extra[[nm]]
-  }
-  current$harness <- block
-  jsonlite::write_json(
-    current, path, auto_unbox = TRUE, pretty = TRUE, null = "null"
-  )
-  path
-}
 
 #' List the registered adapters
 #'

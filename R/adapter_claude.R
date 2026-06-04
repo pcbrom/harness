@@ -2,10 +2,11 @@
 #
 # Claude Code discovers skills under <config_home>/skills/<skill>/SKILL.md and
 # reads project instructions from <project>/.claude/CLAUDE.md. This adapter
-# links the curated skills into the skills directory, writes a namespaced
-# harness block into settings.json without disturbing existing keys, and places
-# the role system prompt where Claude Code will read it. It never spawns a
-# process; launch() owns the terminal.
+# links the curated skills into the skills directory and places the role system
+# prompt where Claude Code reads it. It does not modify settings.json: the
+# coder needs nothing there, and rewriting a user's global settings risks
+# disturbing unrelated configuration. It never spawns a process; launch() owns
+# the terminal.
 
 # Default configuration home for Claude Code.
 claude_config_home <- function() {
@@ -52,16 +53,10 @@ adapter_claude <- function() {
         harness$skills, file.path(config_home, "skills"), cs_path
       )
       prompt_rel <- claude_write_prompt(harness, project_dir)
-      block <- harness_config_block(
-        harness, project_dir, links$linked, prompt_rel
-      )
-      settings_path <- harness_write_json_config(
-        file.path(config_home, "settings.json"), block
-      )
       list(
         adapter = "claude",
         config_home = config_home,
-        settings_path = settings_path,
+        config_path = NA_character_,
         prompt_file = file.path(project_dir, prompt_rel),
         skills_root = links$skills_root,
         skills_linked = links$linked,
