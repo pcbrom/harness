@@ -216,6 +216,48 @@ launch("opencode", role = "data-scientist", config_home = tempfile("opencode-hom
 launch("codex", role = "data-scientist", config_home = tempfile("codex-home"))
 ```
 
+### Comparing coders on the same task
+
+Because the same role drives any coder, a single project can run several coders
+on one problem and keep their outputs apart. Scaffold the role once, then open
+each coder and give it the same task, pointing each at its own scripts folder:
+
+``` r
+setwd("~/Downloads/testes")
+library(harness)
+setup("data-scientist", scaffold = TRUE)
+
+launch("claude",   role = "data-scientist")
+launch("codex",    role = "data-scientist")
+launch("opencode", role = "data-scientist")
+```
+
+In each coder terminal, paste the same task and direct it to a coder-specific
+folder. For claude:
+
+```
+Classify the iris species. Write a SINGLE R script to
+analysis/scripts_claude/2026-06-04_iris-classification.R that uses set.seed(42),
+a stratified 70/30 split by Species, nnet::multinom, the test-set accuracy and a
+confusion matrix, and saves two ggplot2 figures to output/figures/. Follow the
+project instructions: native pipe, a short comment above each block, do not
+execute anything, only write the script.
+```
+
+Repeat in the codex and opencode terminals with `analysis/scripts_codex/` and
+`analysis/scripts_opencode/`. Each agent writes its script and a decision log
+under `logs/`, and runs nothing. You then read and run each script yourself and
+compare:
+
+``` r
+source("analysis/scripts_claude/2026-06-04_iris-classification.R")
+source("analysis/scripts_codex/2026-06-04_iris-classification.R")
+source("analysis/scripts_opencode/2026-06-04_iris-classification.R")
+```
+
+The separate folders keep the three implementations side by side, while the
+decision logs record why each agent made its choices.
+
 ## Roles in this version
 
 Seventeen curated harnesses ship in the current development version. List them
