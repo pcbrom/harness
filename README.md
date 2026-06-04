@@ -91,6 +91,28 @@ To use a checkout you already keep elsewhere, point the environment variable at
 it instead of cloning, through `COMMUNITY_SKILLS_PATH`, `~/.community-skills/` or
 `~/projects/community-skills/`.
 
+### Keeping the catalogue current
+
+`update_community_skills()` runs a fast-forward `git pull` on the checkout so
+the curated skills track upstream:
+
+``` r
+update_community_skills()
+```
+
+The update can also run when the package is attached, but only as an explicit
+opt-in. The default does nothing on load, so the package never accesses the
+network without instruction. Enable the behaviour with an option or an
+environment variable:
+
+``` r
+options(harness.auto_update = TRUE)   # in .Rprofile, for example
+# or
+Sys.setenv(HARNESS_AUTO_UPDATE = "true")
+library(harness)
+#> harness: community-skills updated at /home/you/.community-skills.
+```
+
 ## Usage
 
 ``` r

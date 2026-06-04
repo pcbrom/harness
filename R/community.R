@@ -60,3 +60,69 @@ clone_community_skills <- function(dest = file.path(path.expand("~"), ".communit
   }
   invisible(normalizePath(dest, mustWork = FALSE))
 }
+
+#' Update the community-skills catalogue
+#'
+#' Runs a fast-forward `git pull` on an existing community-skills checkout so
+#' that the curated skills track the upstream repository. The update is
+#' user-initiated. It can also run when the package is attached, but only when
+#' the user opts in through the `harness.auto_update` option or the
+#' `HARNESS_AUTO_UPDATE` environment variable; the default does nothing on load.
+#'
+#' @param dest The checkout to update. Defaults to the discovered path from
+#'   [community_skills_path()].
+#' @param quiet Suppress git and progress messages.
+#' @return The absolute path to the checkout, invisibly.
+#' @export
+#' @examples
+#' \dontrun{
+#' update_community_skills()
+#' }
+update_community_skills <- function(dest = community_skills_path(), quiet = FALSE) {
+  if (length(dest) != 1L || is.na(dest)) {
+    harness_abort(
+      "community-skills checkout not found; clone it with clone_community_skills().",
+      class = "harness_no_community_skills"
+    )
+  }
+  if (!is_community_skills_root(dest)) {
+    harness_abort(
+      sprintf("'%s' is not a community-skills checkout.", dest),
+      class = "harness_not_checkout"
+    )
+  }
+  if (!dir.exists(file.path(dest, ".git"))) {
+    harness_abort(
+      sprintf("'%s' is not a git checkout; cannot update.", dest),
+      class = "harness_not_git_checkout"
+    )
+  }
+  git <- find_binary("git")
+  if (is.na(git)) {
+    harness_abort("git not found on PATH.", class = "harness_no_git")
+  }
+  out <- if (isTRUE(quiet)) FALSE else ""
+  code <- system2(
+    git, c("-C", shQuote(dest), "pull", "--ff-only"),
+    stdout = out, stderr = out
+  )
+  if (!identical(as.integer(code), 0L)) {
+    harness_abort("git pull of community-skills failed.", class = "harness_update_failed")
+  }
+  if (!quiet) {
+    message("community-skills updated at ", dest)
+  }
+  invisible(normalizePath(dest, mustWork = FALSE))
+}
+
+# TRUE when the user opted in to updating the catalogue on load. The option
+# takes precedence over the environment variable. The default is off, so the
+# package does not access the network on load unless explicitly told to.
+harness_auto_update_enabled <- function() {
+  opt <- getOption("harness.auto_update", NULL)
+  if (!is.null(opt)) {
+    return(isTRUE(opt))
+  }
+  env <- tolower(trimws(Sys.getenv("HARNESS_AUTO_UPDATE", "")))
+  env %in% c("1", "true", "yes", "on")
+}

@@ -30,6 +30,9 @@ Adicionado:
 - `clone_community_skills()` para obter o catalogo externo em um caminho
   discoverable, sem embuti-lo. Mensagem de carregamento indica o comando quando
   o catalogo nao e encontrado, sem acessar a rede no load.
+- `update_community_skills()` para `git pull --ff-only` no checkout. Auto-update
+  no carregamento e opt-in via opcao `harness.auto_update` ou variavel
+  `HARNESS_AUTO_UPDATE`; por padrao o pacote nao acessa a rede no load.
 - Lancamento via `rstudioapi::terminalCreate` quando dentro do RStudio, com
   recuo para emulador de terminal externo e, na ausencia deste, para reporte do
   comando ao usuario.
