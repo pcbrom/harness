@@ -35,3 +35,10 @@ Adicionado:
   comando ao usuario.
 - Suite testthat com testes de fumaca dos quatro harnesses e do adapter
   `claude` com binario mockado e checkout de fixture.
+- `role_list()`: tabela dos papeis com versao, contagem de skills e descricao.
+- Adapters `opencode` e `codex`, antecipados das fases seguintes: geracao do
+  `opencode.json` e do `.codex/config.json` por mesclagem nao destrutiva,
+  prompt do papel em `AGENTS.md` (convencao cross-tool, sem sobrescrever um
+  arquivo existente) e ligacao dos SKILL.md curados. Helpers de adapter
+  extraidos para uso comum (`harness_link_skills`, `harness_config_block`,
+  `harness_write_agents`, `harness_write_json_config`).

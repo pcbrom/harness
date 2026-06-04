@@ -24,6 +24,39 @@ available_roles <- function() {
   sort(sub("\\.ya?ml$", "", files))
 }
 
+#' Tabulate the available roles
+#'
+#' Returns a data frame with one row per curated role, summarising its version,
+#' the number of skills it declares, and the first line of its description.
+#'
+#' @return A data frame with columns `role`, `version`, `skills` and
+#'   `description`.
+#' @export
+#' @examples
+#' role_list()
+role_list <- function() {
+  roles <- available_roles()
+  if (length(roles) == 0L) {
+    return(data.frame(
+      role = character(), version = character(),
+      skills = integer(), description = character(),
+      stringsAsFactors = FALSE
+    ))
+  }
+  rows <- lapply(roles, function(nm) {
+    h <- role(nm)
+    first_line <- trimws(strsplit(h$description %||% "", "\n", fixed = TRUE)[[1]][1])
+    data.frame(
+      role = nm,
+      version = h$version %||% NA_character_,
+      skills = length(h$skills),
+      description = first_line %||% "",
+      stringsAsFactors = FALSE
+    )
+  })
+  do.call(rbind, rows)
+}
+
 # Resolve a role name to its YAML path inside the catalogue.
 harness_path <- function(name) {
   dir <- harness_catalogue_dir()

@@ -99,8 +99,11 @@ library(harness)
 # Inspect the environment: skills checkout, roles, adapters
 status()
 
-# List the curated roles
+# List the curated roles, names only
 available_roles()
+
+# Tabulate the roles with version, skill count and description
+role_list()
 
 # Validate the environment for a role and scaffold its folder layout
 setup("data-scientist", scaffold = TRUE)
@@ -113,12 +116,32 @@ launch("claude", role = "data-scientist")
 RStudio, and falls back to an external terminal emulator or, when none is
 available, reports the command for the user to run.
 
+## Adapters
+
+The coder is selected by the first argument of `launch()`. The current adapters
+are `claude`, `opencode` and `codex`; `aider` and `gemini-cli` arrive in a later
+phase. The same role drives any adapter, so switching coder keeps the skills,
+the prompt and the folder convention:
+
+``` r
+launch("opencode", role = "data-scientist")
+launch("codex", role = "data-scientist")
+```
+
+To experiment without touching a real coder configuration, redirect the config
+home to a temporary directory:
+
+``` r
+launch("opencode", role = "data-scientist", config_home = tempfile("opencode-home"))
+launch("codex", role = "data-scientist", config_home = tempfile("codex-home"))
+```
+
 ## Roles in this version
 
 Four curated harnesses ship in the current development version:
 `data-scientist`, `statistician`, `package-maintainer` and `paper-author`. The
-target taxonomy covers seventeen professional roles; the remaining roles and
-four further coder adapters arrive in later development phases.
+target taxonomy covers seventeen professional roles; the remaining roles arrive
+in later development phases.
 
 ## Audit-first convention
 
