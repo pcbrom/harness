@@ -148,6 +148,54 @@ launch("claude", role = "data-scientist")
 RStudio, and falls back to an external terminal emulator or, when none is
 available, reports the command for the user to run.
 
+### Function reference
+
+| Function | Purpose |
+|---|---|
+| `status()` | report the environment: checkout, roles, adapters |
+| `available_roles()` | role names |
+| `role_list()` | roles with version, skill count and description |
+| `role_skills(name, available =)` | skills of a role, optionally flagged by checkout presence |
+| `role(name)` | load the full role object |
+| `role_config(name)` | print the full configuration, including the system prompt |
+| `setup(name, scaffold =)` | validate the environment and scaffold the layout |
+| `launch(adapter, role, ...)` | open the coder in a terminal tab |
+| `adapters()` | registered coder names |
+| `clone_community_skills()` | fetch the external catalogue |
+| `update_community_skills()` | fast-forward the catalogue |
+
+## A first session
+
+Set up a role and launch a coder:
+
+``` r
+library(harness)
+setup("data-scientist", scaffold = TRUE)   # validate and create the layout
+launch("claude", role = "data-scientist")  # open the coder in a terminal tab
+```
+
+In the coder terminal, state a concrete task, for example: classify the species
+in the iris dataset, with an exploratory figure, a stratified train/test split,
+a multinomial model and the test-set accuracy.
+
+The agent writes, but does not run, a script under `analysis/scripts/` and a
+decision log under `logs/`:
+
+```
+analysis/scripts/2026-06-04_iris-classification.R
+logs/2026-06-04_01_iris-classification.md
+```
+
+The log records the decision, its justification and the result, leaving the run
+outcome blank until execution. You read the script, then run it yourself:
+
+``` r
+source("analysis/scripts/2026-06-04_iris-classification.R")
+#> Test accuracy: 0.911
+```
+
+Nothing the agent produced reached the session state until you chose to run it.
+
 ## Adapters
 
 The coder is selected by the first argument of `launch()`. The current adapters
