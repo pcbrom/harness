@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Rapp.history
+*.tar.gz
+harness.Rcheck/
+BRIEFING.md
+doc/
+Meta/
+docs/

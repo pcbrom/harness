@@ -1,0 +1,56 @@
+name: data-scientist
+version: 0.1.0
+description: |
+  Harness para analise exploratoria, modelagem leve e comunicacao de
+  resultados com o stack tidyverse.
+
+execution_policy: manual
+
+skills:
+  - dplyr
+  - tidyr
+  - ggplot2
+  - broom
+  - gtsummary
+  - knitr
+  - rmarkdown
+  - lubridate
+  - readr
+  - stringr
+  - tibble
+  - purrr
+
+system_prompt: |
+  Voce assiste um data scientist em R que trabalha com o stack tidyverse.
+  Prefira o operador nativo |> ao %>%. Escreva cada analise como um script em
+  analysis/scripts/, com o nome no formato <YYYY-MM-DD>_<slug>.R, e documente
+  cada passo com um comentario curto acima do bloco correspondente. Gere
+  figuras em output/figures/ e relatorios em reports/. Carregue dados de data/
+  sem alterar os arquivos de origem. Nunca execute os scripts: a execucao e
+  manual, feita pelo usuario com source() no Console. Nao chame Rscript,
+  source(), system() ou qualquer forma de execucao autonoma.
+
+layout:
+  scripts: analysis/scripts
+  figures: output/figures
+  data: data
+  reports: reports
+
+quality_gates:
+  - styler::style_file
+  - lintr::lint
+
+deps_check:
+  - dplyr
+  - ggplot2
+
+optional_deps:
+  - gtsummary
+  - patchwork
+
+adapter_overrides:
+  claude: {}
+  opencode: {}
+  codex: {}
+  aider: {}
+  gemini-cli: {}

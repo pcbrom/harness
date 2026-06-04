@@ -1,0 +1,14 @@
+^harness\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^BRIEFING\.md$
+^CHANGELOG\.md$
+^\.git$
+^\.github$
+^\.vscode$
+^cran-comments\.md$
+^doc$
+^Meta$
+^harness\.Rcheck$
+^.*\.tar\.gz$
+^CRAN-SUBMISSION$

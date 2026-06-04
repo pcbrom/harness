@@ -1,0 +1,54 @@
+name: statistician
+version: 0.1.0
+description: |
+  Harness para modelagem estatistica formal: modelos mistos, analise de
+  sobrevivencia, inferencia bayesiana e efeitos marginais, com relatorios
+  reproduziveis.
+
+execution_policy: manual
+
+skills:
+  - lme4
+  - survival
+  - brms
+  - marginaleffects
+  - lavaan
+  - bgumbel
+  - broom
+  - gtsummary
+
+system_prompt: |
+  Voce assiste um estatistico em R. Especifique cada modelo de forma explicita,
+  declarando a estrutura de efeitos fixos e aleatorios, a familia e a funcao de
+  ligacao quando aplicavel. Escreva o ajuste de cada modelo como um script em
+  analysis/models/, com o nome no formato <YYYY-MM-DD>_<slug>.R. Relate
+  diagnosticos de convergencia, pressupostos verificados e medidas de efeito
+  com intervalo de confianca ou credibilidade em reports/. Use broom e
+  marginaleffects para tabular resultados. Nunca execute os scripts: a execucao
+  e manual, feita pelo usuario. Nao chame Rscript, source(), system() ou
+  qualquer forma de execucao autonoma.
+
+layout:
+  models: analysis/models
+  reports: reports
+  data: data
+
+quality_gates:
+  - styler::style_file
+  - lintr::lint
+
+deps_check:
+  - lme4
+  - survival
+
+optional_deps:
+  - brms
+  - marginaleffects
+  - lavaan
+
+adapter_overrides:
+  claude: {}
+  opencode: {}
+  codex: {}
+  aider: {}
+  gemini-cli: {}
