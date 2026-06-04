@@ -13,14 +13,20 @@ find_binary <- function(name, extra_paths = character()) {
   if (nzchar(hit)) {
     return(hit)
   }
+  home <- path.expand("~")
   candidates <- c(
     extra_paths,
-    file.path(path.expand("~"), ".local", "bin", name),
-    file.path(path.expand("~"), "bin", name),
-    file.path(path.expand("~"), ".npm-global", "bin", name),
-    file.path(path.expand("~"), ".local", "share", "npm", "bin", name),
-    file.path(path.expand("~"), ".bun", "bin", name),
-    file.path(path.expand("~"), ".opencode", "bin", name),
+    file.path(home, ".local", "bin", name),
+    file.path(home, "bin", name),
+    file.path(home, ".npm-global", "bin", name),
+    file.path(home, ".local", "share", "npm", "bin", name),
+    file.path(home, ".bun", "bin", name),
+    file.path(home, ".opencode", "bin", name),
+    # node version managers keep their bins outside the default PATH: nvm and
+    # fnm install global CLIs (opencode, codex) under a per-version bin dir.
+    rev(Sys.glob(file.path(home, ".nvm", "versions", "node", "*", "bin", name))),
+    rev(Sys.glob(file.path(home, ".local", "share", "fnm", "node-versions",
+                           "*", "installation", "bin", name))),
     file.path("/usr", "local", "bin", name),
     file.path("/opt", "homebrew", "bin", name)
   )
@@ -32,9 +38,11 @@ find_binary <- function(name, extra_paths = character()) {
   find_binary_via_login_shell(name)
 }
 
-# Ask the user's login shell for the binary path. The login shell sources the
-# profile, so it sees PATH entries that the R process does not. Bounded with a
-# timeout when one is available, and silent on any failure.
+# Ask the user's shell for the binary path. PATH entries from version managers
+# live either in the login profile or in the interactive rc, so both a login
+# (-lc) and an interactive (-ic) probe are tried; the interactive one matches
+# the terminal that the user actually launches the coder in. Bounded with a
+# timeout when available, and silent on any failure.
 find_binary_via_login_shell <- function(name) {
   if (.Platform$OS.type != "unix") {
     return(NA_character_)
@@ -43,24 +51,26 @@ find_binary_via_login_shell <- function(name) {
   if (!nzchar(shell)) {
     shell <- "bash"
   }
-  probe <- paste0("command -v ", name)
-  call_args <- c("-lc", shQuote(probe))
+  probe <- paste0("command -v ", name, " 2>/dev/null")
   timeout_bin <- unname(Sys.which("timeout"))
-  out <- tryCatch(
-    suppressWarnings(
-      if (nzchar(timeout_bin)) {
-        system2(timeout_bin, c("5", shell, call_args), stdout = TRUE, stderr = FALSE)
-      } else {
-        system2(shell, call_args, stdout = TRUE, stderr = FALSE)
+  for (flags in c("-lc", "-ic")) {
+    out <- tryCatch(
+      suppressWarnings(
+        if (nzchar(timeout_bin)) {
+          system2(timeout_bin, c("5", shell, flags, shQuote(probe)),
+                  stdout = TRUE, stderr = FALSE)
+        } else {
+          system2(shell, c(flags, shQuote(probe)), stdout = TRUE, stderr = FALSE)
+        }
+      ),
+      error = function(e) character()
+    )
+    out <- out[nzchar(out)]
+    if (length(out) >= 1L) {
+      cand <- out[length(out)]
+      if (file.exists(cand)) {
+        return(cand)
       }
-    ),
-    error = function(e) character()
-  )
-  out <- out[nzchar(out)]
-  if (length(out) >= 1L) {
-    cand <- out[length(out)]
-    if (file.exists(cand)) {
-      return(cand)
     }
   }
   NA_character_
