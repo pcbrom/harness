@@ -1,3 +1,4 @@
+[![r-universe](https://pcbrom.r-universe.dev/badges/harness)](https://pcbrom.r-universe.dev/harness)
 [![R-CMD-check](https://github.com/pcbrom/harness/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pcbrom/harness/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -59,7 +60,15 @@ for the work at hand.
 
 ## Installation
 
-The development version can be installed from GitHub:
+The package is distributed through r-universe:
+
+``` r
+install.packages("harness",
+                 repos = c("https://pcbrom.r-universe.dev",
+                           "https://cloud.r-project.org"))
+```
+
+The development version can also be installed from GitHub:
 
 ``` r
 # install.packages("devtools")
