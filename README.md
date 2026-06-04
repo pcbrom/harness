@@ -134,6 +134,9 @@ role_skills("data-scientist")
 # Skills of a role, flagged by presence in the community-skills checkout
 role_skills("data-scientist", available = TRUE)
 
+# Show the full harness configuration of a role, including the system prompt
+role_config("data-scientist")
+
 # Validate the environment for a role and scaffold its folder layout
 setup("data-scientist", scaffold = TRUE)
 

@@ -184,6 +184,52 @@ role <- function(name) {
 # Internal alias used by other modules; identical to role() but explicit.
 load_harness <- function(name) role(name)
 
+#' Show the full configuration of a role
+#'
+#' Prints the complete harness configuration for a role: description, execution
+#' policy, skills, folder layout, quality gates, package dependencies and the
+#' full system prompt, followed by the path to the source YAML. Unlike the
+#' compact `print` method, this includes the system prompt in full.
+#'
+#' @param name A role name, or a `harness_role` object.
+#' @return The `harness_role` object, invisibly.
+#' @export
+#' @examples
+#' role_config("data-scientist")
+role_config <- function(name) {
+  h <- if (inherits(name, "harness_role")) name else role(name)
+  cat(sprintf("Role: %s (v%s)\n", h$name, h$version %||% "?"))
+  cat(sprintf("Execution policy: %s (agent writes, user runs)\n",
+              h$execution_policy))
+  cat("\nDescription:\n")
+  cat(strwrap(trimws(h$description %||% ""), prefix = "  "), sep = "\n")
+  cat(sprintf("\n\nSkills (%d):\n", length(h$skills)))
+  cat(paste0("  - ", h$skills), sep = "\n")
+  cat("\n\nLayout:\n")
+  for (k in names(h$layout)) {
+    cat(sprintf("  %-12s %s\n", k, as.character(h$layout[[k]])))
+  }
+  if (length(h$quality_gates) > 0L) {
+    cat("\nQuality gates:\n")
+    cat(paste0("  - ", h$quality_gates), sep = "\n")
+    cat("\n")
+  }
+  if (length(h$deps_check) > 0L) {
+    cat(sprintf("\nRequired packages: %s\n", paste(h$deps_check, collapse = ", ")))
+  }
+  if (length(h$optional_deps) > 0L) {
+    cat(sprintf("Optional packages: %s\n", paste(h$optional_deps, collapse = ", ")))
+  }
+  cat("\nSystem prompt:\n")
+  prompt_lines <- strsplit(trimws(h$system_prompt %||% ""), "\n", fixed = TRUE)[[1]]
+  cat(paste0("  ", prompt_lines), sep = "\n")
+  path <- attr(h, "path")
+  if (!is.null(path)) {
+    cat(sprintf("\n\nSource: %s\n", path))
+  }
+  invisible(h)
+}
+
 #' @export
 print.harness_role <- function(x, ...) {
   cat(sprintf("<harness_role> %s (v%s)\n", x$name, x$version %||% "?"))

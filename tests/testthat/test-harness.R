@@ -51,6 +51,15 @@ test_that("print.harness_role is stable", {
   expect_output(print(role("data-scientist")), "data-scientist")
 })
 
+test_that("role_config prints the full configuration including the prompt", {
+  out <- capture.output(role_config("data-scientist"))
+  joined <- paste(out, collapse = "\n")
+  expect_match(joined, "System prompt:")
+  expect_match(joined, "Execution policy: manual")
+  expect_match(joined, "Source:")
+  expect_match(joined, "tidyverse")
+})
+
 test_that("role_skills lists the skills of a single role", {
   rs <- role_skills("data-scientist")
   expect_s3_class(rs, "data.frame")
