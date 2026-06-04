@@ -39,6 +39,7 @@ test_that("every role carries the universal logs directory", {
 test_that("the role prompt body includes the decision-log convention", {
   body <- harness_prompt_body(role("data-scientist"))
   expect_match(body, "Decision log")
+  expect_match(body, "Curated skills")
   expect_match(body, "## Decision")
   expect_match(body, "## Justification")
   expect_match(body, "## Result")
