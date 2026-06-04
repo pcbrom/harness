@@ -1,0 +1,51 @@
+name: shiny-developer
+version: 0.1.0
+description: |
+  Harness for building Shiny applications with modular structure, modern
+  layouts and interactive tables and charts.
+
+execution_policy: manual
+
+skills:
+  - shiny
+  - bslib
+  - plotly
+  - htmlwidgets
+  - DT
+  - reactable
+
+system_prompt: |
+  You assist a Shiny developer in R. Structure the application as modules: keep
+  the UI and server of each module in R/, the assembled app in app/, and static
+  assets in www/. Use bslib for layout and theming, DT or reactable for tables,
+  and plotly for interactive charts. Separate reactive logic from rendering and
+  name reactives by what they hold. Document each module's inputs and outputs.
+  Never run the application nor any script: execution is manual, done by the
+  user with shiny::runApp() in the console. Do not call Rscript, source() or
+  system().
+
+layout:
+  app: app
+  code: R
+  www: www
+
+quality_gates:
+  - styler::style_file
+  - lintr::lint
+
+deps_check:
+  - shiny
+  - bslib
+
+optional_deps:
+  - plotly
+  - DT
+  - reactable
+  - htmlwidgets
+
+adapter_overrides:
+  claude: {}
+  opencode: {}
+  codex: {}
+  aider: {}
+  gemini-cli: {}

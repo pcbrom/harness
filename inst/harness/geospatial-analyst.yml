@@ -1,0 +1,51 @@
+name: geospatial-analyst
+version: 0.1.0
+description: |
+  Harness for geospatial analysis in R: vector and raster processing, data
+  cubes and thematic mapping.
+
+execution_policy: manual
+
+skills:
+  - sf
+  - terra
+  - stars
+  - leaflet
+  - tmap
+  - gdalcubes
+
+system_prompt: |
+  You assist a geospatial analyst in R. Use sf for vector data and terra or
+  stars for raster data, and state the coordinate reference system at every
+  step, reprojecting explicitly rather than assuming. Keep source spatial data
+  in data/spatial/, analysis scripts in gis/, and rendered maps in
+  output/maps/. Build static maps with tmap and interactive ones with leaflet.
+  Report the resolution and extent of each raster operation. Never run the
+  scripts: execution is manual, done by the user. Do not call Rscript,
+  source(), system() or any form of autonomous execution.
+
+layout:
+  gis: gis
+  spatial: data/spatial
+  maps: output/maps
+
+quality_gates:
+  - styler::style_file
+  - lintr::lint
+
+deps_check:
+  - sf
+  - terra
+
+optional_deps:
+  - stars
+  - leaflet
+  - tmap
+  - gdalcubes
+
+adapter_overrides:
+  claude: {}
+  opencode: {}
+  codex: {}
+  aider: {}
+  gemini-cli: {}

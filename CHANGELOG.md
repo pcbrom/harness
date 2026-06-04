@@ -46,5 +46,16 @@ Added:
   existing file) and symlinking of the curated SKILL.md files. Shared adapter
   helpers extracted for common use (`harness_link_skills`,
   `harness_config_block`, `harness_write_agents`, `harness_write_json_config`).
-- testthat suite with smoke tests for the four harnesses and the adapters, with
-  a mocked binary and a fixture checkout.
+- testthat suite with smoke tests for the harnesses and the adapters, with a
+  mocked binary and a fixture checkout.
+- The full taxonomy of seventeen curated harnesses, completing the four initial
+  roles with `data-engineer`, `ml-engineer`, `shiny-developer`,
+  `code-documenter`, `econometrician`, `epidemiologist`, `clinical-biostat`,
+  `geospatial-analyst`, `causal-inference`, `forecast-specialist`,
+  `reproducibility-engineer`, `bioinformatician` and `performance-engineer`. The
+  `performance-engineer` harness wires the autoresearch propose-validate-iterate
+  loop with a hard output-equivalence gate.
+- Coder binary discovery resolves npm-global and node version-manager bins (nvm,
+  fnm) and falls back to a login or interactive shell probe, so the adapters are
+  found under the trimmed PATH of an RStudio session. Discovered paths are not
+  symlink-resolved, so launcher shims are preserved.

@@ -1,8 +1,14 @@
-test_that("available_roles lists the four phase-1 harnesses", {
+test_that("available_roles lists the full taxonomy of seventeen harnesses", {
   roles <- available_roles()
   expect_setequal(
     roles,
-    c("data-scientist", "statistician", "package-maintainer", "paper-author")
+    c(
+      "data-scientist", "statistician", "package-maintainer", "paper-author",
+      "data-engineer", "ml-engineer", "shiny-developer", "code-documenter",
+      "econometrician", "epidemiologist", "clinical-biostat",
+      "geospatial-analyst", "causal-inference", "forecast-specialist",
+      "reproducibility-engineer", "bioinformatician", "performance-engineer"
+    )
   )
 })
 

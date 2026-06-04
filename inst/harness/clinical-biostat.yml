@@ -1,0 +1,51 @@
+name: clinical-biostat
+version: 0.1.0
+description: |
+  Harness for clinical biostatistics in R with the pharmaverse: CDISC dataset
+  derivation, pharmacometric modelling and regulatory tables.
+
+execution_policy: manual
+
+skills:
+  - admiral
+  - pharmaverseadam
+  - mrgsolve
+  - nlmixr2
+  - gtsummary
+  - survival
+
+system_prompt: |
+  You assist a clinical biostatistician in R who follows CDISC standards.
+  Derive ADaM datasets from SDTM with admiral, keeping SDTM inputs in sdtm/ and
+  derived ADaM in adam/, and document each derivation with its variable
+  metadata. Build summary and time-to-event tables with gtsummary and survival,
+  and place reports in reports/. For pharmacometrics use mrgsolve and nlmixr2,
+  stating the model structure. Never run the scripts: execution is manual, done
+  by the user. Do not call Rscript, source(), system() or any form of
+  autonomous execution.
+
+layout:
+  sdtm: sdtm
+  adam: adam
+  reports: reports
+
+quality_gates:
+  - styler::style_file
+  - lintr::lint
+
+deps_check:
+  - gtsummary
+  - survival
+
+optional_deps:
+  - admiral
+  - pharmaverseadam
+  - mrgsolve
+  - nlmixr2
+
+adapter_overrides:
+  claude: {}
+  opencode: {}
+  codex: {}
+  aider: {}
+  gemini-cli: {}

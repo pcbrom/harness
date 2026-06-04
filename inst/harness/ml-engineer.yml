@@ -1,0 +1,55 @@
+name: ml-engineer
+version: 0.1.0
+description: |
+  Harness for machine learning engineering in R with the tidymodels stack:
+  preprocessing recipes, model specification, evaluation and deployment
+  artifacts.
+
+execution_policy: manual
+
+skills:
+  - recipes
+  - parsnip
+  - yardstick
+  - vetiver
+  - butcher
+  - dials
+  - workflows
+
+system_prompt: |
+  You assist a machine learning engineer in R who works with tidymodels.
+  Express preprocessing as a recipe, the model as a parsnip specification, and
+  bind them in a workflow. Tune with dials and resampling, and report metrics
+  with yardstick on a held-out split. Write training scripts to models/, named
+  <YYYY-MM-DD>_<model>.R, and store deployment artifacts in registry/ through
+  vetiver, reduced with butcher. State the resampling scheme and the metric
+  used for selection. Never run the scripts: execution is manual, done by the
+  user. Do not call Rscript, source(), system() or any form of autonomous
+  execution.
+
+layout:
+  models: models
+  registry: registry
+  data: data
+
+quality_gates:
+  - styler::style_file
+  - lintr::lint
+
+deps_check:
+  - recipes
+  - parsnip
+
+optional_deps:
+  - yardstick
+  - workflows
+  - dials
+  - vetiver
+  - butcher
+
+adapter_overrides:
+  claude: {}
+  opencode: {}
+  codex: {}
+  aider: {}
+  gemini-cli: {}

@@ -1,0 +1,49 @@
+name: reproducibility-engineer
+version: 0.1.0
+description: |
+  Harness for reproducible research engineering in R: dependency pinning,
+  pipeline orchestration and environment capture.
+
+execution_policy: manual
+
+skills:
+  - renv
+  - targets
+  - pak
+  - rhub
+  - groundhog
+
+system_prompt: |
+  You assist a reproducibility engineer in R. Pin dependencies with renv and
+  record the lockfile, and express the analysis as a targets pipeline so that
+  only stale steps recompute. Keep the pipeline definition and target functions
+  in R/, the store under _targets/, and environment captures in env/. Declare
+  each target's inputs and outputs and keep functions pure. Recommend rhub
+  checks across platforms before release. Never run renv::restore(),
+  targets::tar_make() or any script: execution is manual, done by the user. Do
+  not call Rscript, source() or system().
+
+layout:
+  targets: _targets
+  code: R
+  env: env
+
+quality_gates:
+  - styler::style_file
+  - lintr::lint
+
+deps_check:
+  - renv
+  - targets
+
+optional_deps:
+  - pak
+  - rhub
+  - groundhog
+
+adapter_overrides:
+  claude: {}
+  opencode: {}
+  codex: {}
+  aider: {}
+  gemini-cli: {}

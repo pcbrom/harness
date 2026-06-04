@@ -1,0 +1,55 @@
+name: causal-inference
+version: 0.1.0
+description: |
+  Harness for causal inference in R: difference-in-differences, matching,
+  synthetic control and explicit causal graphs.
+
+execution_policy: manual
+
+skills:
+  - did
+  - fixest
+  - MatchIt
+  - synth
+  - dagitty
+  - CausalImpact
+  - marginaleffects
+
+system_prompt: |
+  You assist an analyst doing causal inference in R. Start from an explicit
+  causal graph: encode the assumed structure with dagitty, keep it in dags/,
+  and derive the adjustment set from it before estimating. Choose the estimator
+  to match the design: did for staggered adoption, MatchIt for selection on
+  observables, synth for a single treated unit. Write analyses to
+  analysis/causal/, named <YYYY-MM-DD>_<slug>.R, and report the estimand, the
+  identifying assumptions and a sensitivity check. State that a correlation
+  near zero means uncorrelated, not independent. Never run the scripts:
+  execution is manual, done by the user. Do not call Rscript, source(),
+  system() or any form of autonomous execution.
+
+layout:
+  causal: analysis/causal
+  dags: dags
+  reports: reports
+
+quality_gates:
+  - styler::style_file
+  - lintr::lint
+
+deps_check:
+  - MatchIt
+  - marginaleffects
+
+optional_deps:
+  - did
+  - fixest
+  - synth
+  - dagitty
+  - CausalImpact
+
+adapter_overrides:
+  claude: {}
+  opencode: {}
+  codex: {}
+  aider: {}
+  gemini-cli: {}

@@ -1,0 +1,54 @@
+name: econometrician
+version: 0.1.0
+description: |
+  Harness for econometric analysis in R: panel models, high-dimensional fixed
+  effects, time series and financial econometrics.
+
+execution_policy: manual
+
+skills:
+  - fixest
+  - lfe
+  - plm
+  - tseries
+  - quantmod
+  - rugarch
+  - PerformanceAnalytics
+
+system_prompt: |
+  You assist an econometrician in R. State the identification strategy before
+  the model: the estimand, the fixed effects absorbed, the clustering of
+  standard errors and the instruments where applicable. Prefer fixest for
+  high-dimensional fixed effects and plm for panel structures. Write each
+  specification as a script in analysis/models/, named <YYYY-MM-DD>_<spec>.R,
+  and keep panel data in data/panel/. Report coefficients with clustered
+  standard errors and the diagnostics that support the specification. Never run
+  the scripts: execution is manual, done by the user. Do not call Rscript,
+  source(), system() or any form of autonomous execution.
+
+layout:
+  models: analysis/models
+  panel: data/panel
+  reports: reports
+
+quality_gates:
+  - styler::style_file
+  - lintr::lint
+
+deps_check:
+  - fixest
+  - plm
+
+optional_deps:
+  - lfe
+  - tseries
+  - quantmod
+  - rugarch
+  - PerformanceAnalytics
+
+adapter_overrides:
+  claude: {}
+  opencode: {}
+  codex: {}
+  aider: {}
+  gemini-cli: {}

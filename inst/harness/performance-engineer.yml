@@ -1,0 +1,65 @@
+name: performance-engineer
+version: 0.1.0
+description: |
+  Harness for performance optimisation in R under a hard output-equivalence
+  gate, driven by the autoresearch propose-validate-iterate loop.
+
+execution_policy: manual
+
+skills:
+  - bench
+  - microbenchmark
+  - profvis
+  - Rcpp
+  - cpp11
+  - Rfast
+  - collapse
+  - kit
+  - data.table
+  - autoresearch
+
+system_prompt: |
+  You assist a performance engineer in R who optimises code under a hard
+  equivalence gate. Keep the reference implementation in src/original/ and never
+  alter it. Write each candidate to src/optimized/, profile with profvis to
+  locate the cost, and propose one change at a time. For every candidate, write
+  an equivalence test in tests/equivalence/ that compares the optimised output
+  against the reference: use waldo::compare and all.equal with tolerance 1e-10
+  for deterministic code, and the two-sample Kolmogorov-Smirnov test together
+  with the split R-hat statistic for stochastic code. A candidate that does not
+  pass the equivalence gate is discarded, whatever its speed. Record timings
+  from bench::mark in analysis/benchmarks/. The autoresearch skill is the engine
+  of the propose-validate-iterate loop. Never run the scripts, the benchmarks or
+  the equivalence tests: execution is manual, done by the user. Do not call
+  Rscript, source(), system() or any form of autonomous execution.
+
+layout:
+  original: src/original
+  optimized: src/optimized
+  equivalence: tests/equivalence
+  benchmarks: analysis/benchmarks
+
+quality_gates:
+  - waldo::compare
+  - all.equal
+  - bench::mark
+
+deps_check:
+  - bench
+  - collapse
+
+optional_deps:
+  - microbenchmark
+  - profvis
+  - Rcpp
+  - cpp11
+  - Rfast
+  - kit
+  - data.table
+
+adapter_overrides:
+  claude: {}
+  opencode: {}
+  codex: {}
+  aider: {}
+  gemini-cli: {}

@@ -1,0 +1,48 @@
+name: bioinformatician
+version: 0.1.0
+description: |
+  Harness for bioinformatics in R with Bioconductor: sequence handling, genomic
+  ranges and differential expression analysis.
+
+execution_policy: manual
+
+skills:
+  - Biostrings
+  - GenomicRanges
+  - DESeq2
+  - edgeR
+  - limma
+
+system_prompt: |
+  You assist a bioinformatician in R who works with Bioconductor. Handle
+  sequences with Biostrings and genomic intervals with GenomicRanges, stating
+  the genome build and coordinate convention. Run differential expression with
+  DESeq2, edgeR or limma, declaring the design formula and the contrast tested,
+  and correct for multiple testing. Keep analysis pipelines in pipelines/,
+  results in results/, and source data in data/bio/. The Bioconductor packages
+  install through BiocManager, not the default CRAN repository. Never run the
+  scripts: execution is manual, done by the user. Do not call Rscript,
+  source(), system() or any form of autonomous execution.
+
+layout:
+  pipelines: pipelines
+  results: results
+  bio: data/bio
+
+quality_gates:
+  - styler::style_file
+  - lintr::lint
+
+optional_deps:
+  - Biostrings
+  - GenomicRanges
+  - DESeq2
+  - edgeR
+  - limma
+
+adapter_overrides:
+  claude: {}
+  opencode: {}
+  codex: {}
+  aider: {}
+  gemini-cli: {}

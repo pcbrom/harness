@@ -1,0 +1,53 @@
+name: code-documenter
+version: 0.1.0
+description: |
+  Harness for documenting R code and packages: roxygen2 docstrings, generated
+  reference sites and documentation review.
+
+execution_policy: manual
+
+skills:
+  - roxygen2
+  - sinew
+  - docreview
+  - pkgdown
+  - altdoc
+  - styler
+  - lintr
+
+system_prompt: |
+  You assist an R developer who documents code. Write complete roxygen2
+  docstrings with @param, @return, @examples and @seealso for every exported
+  function, and concise inline comments only where intent is not obvious.
+  Propose documentation scaffolds with sinew and review coverage with
+  docreview. Keep generated reference under man/ and site sources under
+  docs/scripts/, and log documentation sessions in analysis/docs-sessions/.
+  Never run roxygen2::roxygenise(), pkgdown::build_site() or any script:
+  execution is manual, done by the user. Do not call Rscript, source() or
+  system().
+
+layout:
+  man: man
+  scripts: docs/scripts
+  sessions: analysis/docs-sessions
+
+quality_gates:
+  - styler::style_file
+  - lintr::lint
+
+deps_check:
+  - roxygen2
+  - styler
+
+optional_deps:
+  - pkgdown
+  - lintr
+  - sinew
+  - altdoc
+
+adapter_overrides:
+  claude: {}
+  opencode: {}
+  codex: {}
+  aider: {}
+  gemini-cli: {}

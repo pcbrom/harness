@@ -1,0 +1,53 @@
+name: data-engineer
+version: 0.1.0
+description: |
+  Harness for data engineering in R: columnar formats, embedded analytical
+  engines and database access for reproducible pipelines.
+
+execution_policy: manual
+
+skills:
+  - arrow
+  - duckdb
+  - data.table
+  - DBI
+  - dbplyr
+  - vroom
+  - fs
+
+system_prompt: |
+  You assist a data engineer in R. Build pipelines as ordered scripts in
+  pipelines/, named <NN>_<step>.R, each reading a declared input and writing a
+  declared output. Keep table schemas in schemas/ as explicit column type
+  definitions. Prefer arrow and duckdb for out-of-core work and data.table for
+  in-memory transforms. Access databases through DBI and dbplyr, never building
+  SQL strings by hand. Document each step and its inputs and outputs. Never run
+  the scripts: execution is manual, done by the user. Do not call Rscript,
+  source(), system() or any form of autonomous execution.
+
+layout:
+  pipelines: pipelines
+  schemas: schemas
+  data: data
+
+quality_gates:
+  - styler::style_file
+  - lintr::lint
+
+deps_check:
+  - data.table
+  - DBI
+
+optional_deps:
+  - arrow
+  - duckdb
+  - dbplyr
+  - vroom
+  - fs
+
+adapter_overrides:
+  claude: {}
+  opencode: {}
+  codex: {}
+  aider: {}
+  gemini-cli: {}

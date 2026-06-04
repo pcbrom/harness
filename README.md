@@ -160,10 +160,31 @@ launch("codex", role = "data-scientist", config_home = tempfile("codex-home"))
 
 ## Roles in this version
 
-Four curated harnesses ship in the current development version:
-`data-scientist`, `statistician`, `package-maintainer` and `paper-author`. The
-target taxonomy covers seventeen professional roles; the remaining roles arrive
-in later development phases.
+Seventeen curated harnesses ship in the current development version. List them
+with `role_list()`:
+
+| Role | Focus |
+|---|---|
+| `data-scientist` | exploratory analysis and communication with the tidyverse |
+| `statistician` | mixed models, survival, Bayesian inference, marginal effects |
+| `package-maintainer` | package development, tests, documentation, CRAN preparation |
+| `paper-author` | reproducible papers in R Markdown or Quarto |
+| `data-engineer` | columnar formats, embedded engines, database pipelines |
+| `ml-engineer` | tidymodels training, evaluation and deployment artifacts |
+| `shiny-developer` | modular Shiny applications |
+| `code-documenter` | roxygen2 docstrings and reference sites |
+| `econometrician` | panel models, fixed effects, time series |
+| `epidemiologist` | outbreak reconstruction and reproduction numbers |
+| `clinical-biostat` | CDISC derivation and regulatory tables with the pharmaverse |
+| `geospatial-analyst` | vector and raster analysis, thematic mapping |
+| `causal-inference` | difference-in-differences, matching, causal graphs |
+| `forecast-specialist` | time series forecasting with the tidyverts stack |
+| `reproducibility-engineer` | dependency pinning and pipeline orchestration |
+| `bioinformatician` | Bioconductor sequence and expression analysis |
+| `performance-engineer` | optimisation under a hard output-equivalence gate |
+
+Each harness is a proposal open to contribution; refinements are welcome by pull
+request.
 
 ## Audit-first convention
 

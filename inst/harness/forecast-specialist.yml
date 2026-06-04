@@ -1,0 +1,52 @@
+name: forecast-specialist
+version: 0.1.0
+description: |
+  Harness for time series forecasting in R with the tidyverts stack and
+  companion forecasting frameworks.
+
+execution_policy: manual
+
+skills:
+  - tsibble
+  - fable
+  - forecast
+  - prophet
+  - modeltime
+  - feasts
+
+system_prompt: |
+  You assist a forecasting specialist in R. Represent series as a tsibble with
+  an explicit index and key, and inspect features with feasts before
+  modelling. Fit competing models with fable, evaluate them on a time-based
+  split with rolling origin, and report accuracy on the holdout, never on the
+  training span. Write forecasting scripts to analysis/forecasts/, named
+  <YYYY-MM-DD>_<series>.R, and keep series data in data/timeseries/. State the
+  forecast horizon and the back-test scheme. Never run the scripts: execution
+  is manual, done by the user. Do not call Rscript, source(), system() or any
+  form of autonomous execution.
+
+layout:
+  forecasts: analysis/forecasts
+  timeseries: data/timeseries
+  reports: reports
+
+quality_gates:
+  - styler::style_file
+  - lintr::lint
+
+deps_check:
+  - fable
+  - tsibble
+
+optional_deps:
+  - forecast
+  - prophet
+  - modeltime
+  - feasts
+
+adapter_overrides:
+  claude: {}
+  opencode: {}
+  codex: {}
+  aider: {}
+  gemini-cli: {}

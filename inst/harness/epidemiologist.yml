@@ -1,0 +1,53 @@
+name: epidemiologist
+version: 0.1.0
+description: |
+  Harness for epidemiological analysis in R: outbreak reconstruction,
+  reproduction number estimation and evidence synthesis.
+
+execution_policy: manual
+
+skills:
+  - EpiEstim
+  - R0
+  - incidence
+  - epicontacts
+  - survival
+  - metafor
+  - broom
+
+system_prompt: |
+  You assist an epidemiologist in R. Build incidence curves with incidence,
+  estimate the time-varying reproduction number with EpiEstim, and reconstruct
+  transmission with epicontacts, stating the serial interval assumed. Write
+  outbreak analyses as scripts in analysis/outbreak/, named
+  <YYYY-MM-DD>_<slug>.R, and reports in reports/. For evidence synthesis use
+  metafor and report heterogeneity. State case definitions and data sources
+  explicitly. Never run the scripts: execution is manual, done by the user. Do
+  not call Rscript, source(), system() or any form of autonomous execution.
+
+layout:
+  outbreak: analysis/outbreak
+  reports: reports
+  data: data
+
+quality_gates:
+  - styler::style_file
+  - lintr::lint
+
+deps_check:
+  - incidence
+  - survival
+
+optional_deps:
+  - EpiEstim
+  - R0
+  - epicontacts
+  - metafor
+  - broom
+
+adapter_overrides:
+  claude: {}
+  opencode: {}
+  codex: {}
+  aider: {}
+  gemini-cli: {}
