@@ -57,6 +57,39 @@ role_list <- function() {
   do.call(rbind, rows)
 }
 
+#' List the skills of one or more roles
+#'
+#' Returns a long data frame with one row per role-skill pair. With
+#' `available = TRUE`, each skill is checked against the community-skills
+#' checkout and an `available` column reports whether its SKILL.md is present.
+#'
+#' @param role_name A role name, or `NULL` (the default) for every role.
+#' @param available When `TRUE`, add an `available` column reporting whether the
+#'   skill is present in the community-skills checkout.
+#' @return A data frame with columns `role` and `skill`, plus `available` when
+#'   requested.
+#' @export
+#' @examples
+#' role_skills("data-scientist")
+#' utils::head(role_skills())
+role_skills <- function(role_name = NULL, available = FALSE) {
+  names_ <- role_name %||% available_roles()
+  cs <- if (isTRUE(available)) community_skills_path() else NA_character_
+  rows <- lapply(names_, function(nm) {
+    h <- role(nm)
+    df <- data.frame(role = nm, skill = h$skills, stringsAsFactors = FALSE)
+    if (isTRUE(available)) {
+      df$available <- vapply(
+        h$skills,
+        function(s) !is.na(cs) && skill_available(cs, s),
+        logical(1)
+      )
+    }
+    df
+  })
+  do.call(rbind, rows)
+}
+
 # Resolve a role name to its YAML path inside the catalogue.
 harness_path <- function(name) {
   dir <- harness_catalogue_dir()

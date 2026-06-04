@@ -50,3 +50,24 @@ test_that("role() aborts on an unknown name", {
 test_that("print.harness_role is stable", {
   expect_output(print(role("data-scientist")), "data-scientist")
 })
+
+test_that("role_skills lists the skills of a single role", {
+  rs <- role_skills("data-scientist")
+  expect_s3_class(rs, "data.frame")
+  expect_setequal(rs$skill, role("data-scientist")$skills)
+  expect_true(all(rs$role == "data-scientist"))
+})
+
+test_that("role_skills covers every role when called without a name", {
+  rs <- role_skills()
+  expect_setequal(unique(rs$role), available_roles())
+})
+
+test_that("role_skills marks availability against a fixture checkout", {
+  root <- make_fake_checkout(c("dplyr", "ggplot2"))
+  withr::local_envvar(COMMUNITY_SKILLS_PATH = root)
+  rs <- role_skills("data-scientist", available = TRUE)
+  expect_true("available" %in% names(rs))
+  expect_true(rs$available[rs$skill == "dplyr"])
+  expect_false(rs$available[rs$skill == "gtsummary"])
+})

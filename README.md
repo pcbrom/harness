@@ -127,6 +127,13 @@ available_roles()
 # Tabulate the roles with version, skill count and description
 role_list()
 
+# Inspect the skills of a role
+role("data-scientist")$skills
+role_skills("data-scientist")
+
+# Skills of a role, flagged by presence in the community-skills checkout
+role_skills("data-scientist", available = TRUE)
+
 # Validate the environment for a role and scaffold its folder layout
 setup("data-scientist", scaffold = TRUE)
 
