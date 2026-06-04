@@ -70,8 +70,25 @@ devtools::install_github("pcbrom/harness")
 
 The curated skills come from the external
 [community-skills](https://github.com/pcbrom/community-skills) catalogue, which
-is never bundled with this package. Clone it and make it discoverable through
-the `COMMUNITY_SKILLS_PATH` environment variable, `~/.community-skills/` or
+is never bundled with this package. When the catalogue is not found, the package
+points at the command that fetches it as soon as it is loaded:
+
+``` r
+library(harness)
+#> harness: community-skills catalogue not found.
+#>   Fetch it with:  harness::clone_community_skills()
+#>   Or set COMMUNITY_SKILLS_PATH to an existing checkout.
+```
+
+`clone_community_skills()` clones the catalogue into `~/.community-skills/`, one
+of the discovery paths, so the next call finds it with no further configuration:
+
+``` r
+clone_community_skills()
+```
+
+To use a checkout you already keep elsewhere, point the environment variable at
+it instead of cloning, through `COMMUNITY_SKILLS_PATH`, `~/.community-skills/` or
 `~/projects/community-skills/`.
 
 ## Usage

@@ -27,6 +27,9 @@ Adicionado:
 - Descoberta do `community-skills` por `COMMUNITY_SKILLS_PATH`,
   `~/.community-skills/` ou `~/projects/community-skills/`, sem embutir o
   catalogo no tarball.
+- `clone_community_skills()` para obter o catalogo externo em um caminho
+  discoverable, sem embuti-lo. Mensagem de carregamento indica o comando quando
+  o catalogo nao e encontrado, sem acessar a rede no load.
 - Lancamento via `rstudioapi::terminalCreate` quando dentro do RStudio, com
   recuo para emulador de terminal externo e, na ausencia deste, para reporte do
   comando ao usuario.
