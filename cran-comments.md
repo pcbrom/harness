@@ -11,8 +11,11 @@ This is a new submission.
 
 0 errors | 0 warnings | 1 note.
 
-The note is "New submission", which is expected for a first submission to CRAN.
-There is no other note, warning or error.
+The note is "New submission", expected for a first submission to CRAN. On
+win-builder the same note also lists possibly misspelled words in DESCRIPTION:
+"Agentic", "bootstrapper" and "pre". All three are intended: "Agentic" and
+"bootstrapper" describe what the package is, and "pre" is the prefix of
+"pre-configured". There is no other note, warning or error.
 
 ## Notes for the CRAN team
 

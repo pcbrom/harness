@@ -57,6 +57,16 @@ harness_link_skills <- function(skills, skills_root, cs_path) {
       error = function(e) FALSE,
       warning = function(w) FALSE
     )
+    # On Windows file.symlink needs a privilege the build and most user
+    # accounts lack; a directory junction is the native equivalent and needs
+    # none, so fall back to it.
+    if (!isTRUE(ok) && .Platform$OS.type == "windows") {
+      ok <- tryCatch(
+        Sys.junction(nsrc, dest),
+        error = function(e) FALSE,
+        warning = function(w) FALSE
+      )
+    }
     if (isTRUE(ok)) {
       linked <- c(linked, skill)
     } else {
