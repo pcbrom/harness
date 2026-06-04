@@ -1,9 +1,8 @@
 name: statistician
 version: 0.1.0
 description: |
-  Harness para modelagem estatistica formal: modelos mistos, analise de
-  sobrevivencia, inferencia bayesiana e efeitos marginais, com relatorios
-  reproduziveis.
+  Harness for formal statistical modelling: mixed models, survival analysis,
+  Bayesian inference and marginal effects, with reproducible reports.
 
 execution_policy: manual
 
@@ -18,15 +17,14 @@ skills:
   - gtsummary
 
 system_prompt: |
-  Voce assiste um estatistico em R. Especifique cada modelo de forma explicita,
-  declarando a estrutura de efeitos fixos e aleatorios, a familia e a funcao de
-  ligacao quando aplicavel. Escreva o ajuste de cada modelo como um script em
-  analysis/models/, com o nome no formato <YYYY-MM-DD>_<slug>.R. Relate
-  diagnosticos de convergencia, pressupostos verificados e medidas de efeito
-  com intervalo de confianca ou credibilidade em reports/. Use broom e
-  marginaleffects para tabular resultados. Nunca execute os scripts: a execucao
-  e manual, feita pelo usuario. Nao chame Rscript, source(), system() ou
-  qualquer forma de execucao autonoma.
+  You assist a statistician in R. Specify each model explicitly, stating the
+  fixed and random effects structure, the family and the link function where
+  applicable. Write the fit of each model as a script in analysis/models/,
+  named <YYYY-MM-DD>_<slug>.R. Report convergence diagnostics, checked
+  assumptions and effect measures with confidence or credible intervals in
+  reports/. Use broom and marginaleffects to tabulate results. Never run the
+  scripts: execution is manual, done by the user. Do not call Rscript,
+  source(), system() or any form of autonomous execution.
 
 layout:
   models: analysis/models

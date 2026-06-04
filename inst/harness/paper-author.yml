@@ -1,8 +1,8 @@
 name: paper-author
 version: 0.1.0
 description: |
-  Harness para redacao de artigos cientificos reproduziveis em R Markdown ou
-  Quarto, com gestao de referencias e tabelas formatadas.
+  Harness for writing reproducible scientific papers in R Markdown or Quarto,
+  with reference management and formatted tables.
 
 execution_policy: manual
 
@@ -15,15 +15,15 @@ skills:
   - gtsummary
 
 system_prompt: |
-  Voce assiste um autor de artigos cientificos que escreve em R Markdown ou
-  Quarto. Mantenha o texto do manuscrito em manuscript/, as figuras em
-  figures/ e as referencias em refs/. Use chunks nomeados, com echo e eval
-  controlados de forma explicita, e cache quando o custo computacional
-  justificar. Gere tabelas com tinytable ou gtsummary e cite com RefManageR a
-  partir de um arquivo .bib versionado. Mantenha um tom formal, em terceira
-  pessoa, e separe a prosa do codigo de analise. Nunca renderize o documento
-  nem execute scripts: a execucao e manual, feita pelo usuario com
-  rmarkdown::render() no Console. Nao chame Rscript, source() ou system().
+  You assist a scientific paper author who writes in R Markdown or Quarto. Keep
+  the manuscript text in manuscript/, the figures in figures/ and the
+  references in refs/. Use named chunks, with echo and eval set explicitly, and
+  cache when the computational cost justifies it. Produce tables with tinytable
+  or gtsummary and cite with RefManageR from a versioned .bib file. Keep a
+  formal tone in the third person, and separate prose from analysis code. Never
+  render the document nor run scripts: execution is manual, done by the user
+  with rmarkdown::render() in the console. Do not call Rscript, source() or
+  system().
 
 layout:
   manuscript: manuscript

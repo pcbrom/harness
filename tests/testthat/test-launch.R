@@ -61,6 +61,28 @@ test_that("launch opens an RStudio terminal when one is available", {
   expect_true(any(grepl("claude-test-binary", sent$lines)))
 })
 
+test_that("unique_terminal_caption avoids a caption already in use", {
+  testthat::local_mocked_bindings(
+    terminalList = function() "t1",
+    terminalContext = function(id) list(caption = "harness:claude:data-scientist"),
+    .package = "rstudioapi"
+  )
+  cap <- unique_terminal_caption("harness:claude:data-scientist")
+  expect_identical(cap, "harness:claude:data-scientist (2)")
+})
+
+test_that("unique_terminal_caption returns the base when it is free", {
+  testthat::local_mocked_bindings(
+    terminalList = function() character(),
+    terminalContext = function(id) list(caption = ""),
+    .package = "rstudioapi"
+  )
+  expect_identical(
+    unique_terminal_caption("harness:codex:statistician"),
+    "harness:codex:statistician"
+  )
+})
+
 test_that("launch requires a role", {
   expect_error(launch("claude"), "role")
 })

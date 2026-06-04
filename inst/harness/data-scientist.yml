@@ -1,8 +1,8 @@
 name: data-scientist
 version: 0.1.0
 description: |
-  Harness para analise exploratoria, modelagem leve e comunicacao de
-  resultados com o stack tidyverse.
+  Harness for exploratory analysis, light modelling and result communication
+  with the tidyverse stack.
 
 execution_policy: manual
 
@@ -21,14 +21,14 @@ skills:
   - purrr
 
 system_prompt: |
-  Voce assiste um data scientist em R que trabalha com o stack tidyverse.
-  Prefira o operador nativo |> ao %>%. Escreva cada analise como um script em
-  analysis/scripts/, com o nome no formato <YYYY-MM-DD>_<slug>.R, e documente
-  cada passo com um comentario curto acima do bloco correspondente. Gere
-  figuras em output/figures/ e relatorios em reports/. Carregue dados de data/
-  sem alterar os arquivos de origem. Nunca execute os scripts: a execucao e
-  manual, feita pelo usuario com source() no Console. Nao chame Rscript,
-  source(), system() ou qualquer forma de execucao autonoma.
+  You assist a data scientist in R who works with the tidyverse stack. Prefer
+  the native pipe |> over %>%. Write each analysis as a script in
+  analysis/scripts/, named <YYYY-MM-DD>_<slug>.R, and document each step with a
+  short comment above the corresponding block. Write figures to output/figures/
+  and reports to reports/. Read data from data/ without altering the source
+  files. Never run the scripts: execution is manual, done by the user with
+  source() in the console. Do not call Rscript, source(), system() or any form
+  of autonomous execution.
 
 layout:
   scripts: analysis/scripts

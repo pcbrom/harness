@@ -92,10 +92,8 @@ spawn_terminal <- function(bin, args, project_dir, adapter, role) {
   shell_cmd <- paste(c(shQuote(bin), args), collapse = " ")
 
   if (is_rstudio_terminal()) {
-    id <- rstudioapi::terminalCreate(
-      caption = paste0("harness:", role),
-      show = TRUE
-    )
+    caption <- unique_terminal_caption(paste0("harness:", adapter, ":", role))
+    id <- rstudioapi::terminalCreate(caption = caption, show = TRUE)
     rstudioapi::terminalSend(id, paste0("cd ", shQuote(project_dir), "\n"))
     rstudioapi::terminalSend(id, paste0(shell_cmd, "\n"))
     return(list(spawned = TRUE, method = "rstudio", message = ""))
@@ -117,6 +115,32 @@ spawn_terminal <- function(bin, args, project_dir, adapter, role) {
       project_dir, ":\n  ", shell_cmd
     )
   )
+}
+
+# Find a terminal caption not already in use. RStudio rejects terminalCreate
+# when the caption is taken, so repeated launches need a fresh one. Falls back
+# to the base caption when the terminal list cannot be read.
+unique_terminal_caption <- function(base) {
+  existing <- character()
+  if (requireNamespace("rstudioapi", quietly = TRUE)) {
+    existing <- tryCatch({
+      ids <- rstudioapi::terminalList()
+      vapply(ids, function(id) {
+        ctx <- tryCatch(rstudioapi::terminalContext(id), error = function(e) NULL)
+        if (is.null(ctx)) "" else as.character(ctx$caption %||% "")
+      }, character(1))
+    }, error = function(e) character())
+  }
+  if (!base %in% existing) {
+    return(base)
+  }
+  for (i in 2:99) {
+    cand <- paste0(base, " (", i, ")")
+    if (!cand %in% existing) {
+      return(cand)
+    }
+  }
+  paste0(base, " ", as.integer(Sys.time()))
 }
 
 # Spawn the coder in an external terminal emulator, detached. Returns TRUE on a
