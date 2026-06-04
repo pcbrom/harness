@@ -148,21 +148,116 @@ launch("claude", role = "data-scientist")
 RStudio, and falls back to an external terminal emulator or, when none is
 available, reports the command for the user to run.
 
-### Function reference
+## Function reference
+
+The public functions fall into three groups: discovering roles and skills,
+preparing the environment and the catalogue, and launching a coder.
 
 | Function | Purpose |
 |---|---|
 | `status()` | report the environment: checkout, roles, adapters |
-| `available_roles()` | role names |
+| `available_roles()` | role names, as a character vector |
 | `role_list()` | roles with version, skill count and description |
 | `role_skills(name, available =)` | skills of a role, optionally flagged by checkout presence |
 | `role(name)` | load the full role object |
 | `role_config(name)` | print the full configuration, including the system prompt |
-| `setup(name, scaffold =)` | validate the environment and scaffold the layout |
-| `launch(adapter, role, ...)` | open the coder in a terminal tab |
-| `adapters()` | registered coder names |
-| `clone_community_skills()` | fetch the external catalogue |
+| `community_skills_path()` | resolve the community-skills checkout |
+| `clone_community_skills()` | clone the external catalogue |
 | `update_community_skills()` | fast-forward the catalogue |
+| `setup(name, scaffold =)` | validate the environment and scaffold the layout |
+| `scaffold_layout(name, dir, create =)` | create the role's folder layout |
+| `adapters()` | registered coder names |
+| `launch(adapter, role, ...)` | open the coder in a terminal tab |
+
+### Discovering roles and skills
+
+``` r
+available_roles()
+#> [1] "bioinformatician" "causal-inference" "clinical-biostat" ...
+
+role_list()
+#>                role version skills                              description
+#> 1  bioinformatician   0.1.0      5  Harness for bioinformatics in R ...
+#> ...
+
+# The skills of a role, optionally flagged by presence in the checkout
+role_skills("data-scientist")
+role_skills("data-scientist", available = TRUE)
+
+# The full role object, for programmatic access
+ds <- role("data-scientist")
+ds$skills
+ds$layout
+ds$system_prompt
+
+# The full configuration printed for reading, including the system prompt
+role_config("data-scientist")
+```
+
+### Preparing the environment and the catalogue
+
+``` r
+# Where the external catalogue is, or NA if not found
+community_skills_path()
+
+# Clone the catalogue into ~/.community-skills (a discovery path)
+clone_community_skills()
+
+# Fast-forward the catalogue to track upstream
+update_community_skills()
+
+# Report the environment: checkout, roles, adapters and their binaries
+status()
+
+# Validate the environment for a role and create its folder layout
+setup("data-scientist", scaffold = TRUE)
+
+# Create only the folder layout, without the rest of setup()
+scaffold_layout("data-scientist", project_dir = ".", create = TRUE)
+```
+
+### Launching a coder
+
+``` r
+# The registered coders
+adapters()
+#> [1] "claude"   "opencode" "codex"
+
+# Open the coder in a terminal tab, configured for the role
+launch("claude", role = "data-scientist")
+```
+
+`launch()` accepts:
+
+| Argument | Default | Meaning |
+|---|---|---|
+| `adapter` | `"claude"` | the coder to open; see `adapters()` |
+| `role` | (required) | the role; see `available_roles()` |
+| `project_dir` | `getwd()` | the project root |
+| `scaffold` | `TRUE` | create the role's folder layout |
+| `dry_run` | `FALSE` | configure everything but do not open a terminal |
+| `config_home` | adapter default | where the coder configuration is written |
+| `skills_path` | discovered | override the community-skills checkout |
+| `binary` | discovered | override the coder binary path |
+
+## Using the agents
+
+The package never talks to a language model. It prepares the project and opens
+the coder; the conversation happens inside the coder, in the terminal. A
+session has four steps:
+
+1. Launch. `launch(adapter, role)` writes the role system prompt where the
+   coder reads it (`.claude/CLAUDE.md` for claude, `AGENTS.md` for opencode and
+   codex), links the curated skills, creates the folder layout, and opens the
+   terminal tab anchored in the project.
+2. Ask. In the terminal, state the task in plain language. The role prompt is
+   already active, so the agent works under the curated skills, the folder
+   convention and the audit rules.
+3. The agent writes. It writes scripts into the role's layout folders and a
+   decision log into `logs/`, and it does not run anything.
+4. You run. You read each script and run it yourself from the console with
+   `source()`. Nothing the agent produced reaches the session state until you
+   choose to run it.
 
 ## A first session
 
@@ -257,6 +352,29 @@ source("analysis/scripts_opencode/2026-06-04_iris-classification.R")
 
 The separate folders keep the three implementations side by side, while the
 decision logs record why each agent made its choices.
+
+### A sample run
+
+The comparison above was run once with the three coders on the iris task, to
+check that the curation and the audit rules hold across coders. The observations
+below are from that single run and depend on the coder and model versions used;
+they are recorded as a worked example, not as a benchmark.
+
+| Observation | claude | codex | opencode |
+|---|---|---|---|
+| Wrote the script, ran nothing | yes | yes | yes |
+| Wrote the decision log | yes | yes | varied between runs |
+| Loaded tidyverse components, not the meta-package | yes | yes | yes |
+| Test accuracy of the produced model | about 0.91 | about 0.91 | about 0.91 |
+| Train/test split | index-based | `rsample::initial_split` | `anti_join` |
+
+What held for every coder is what the package guarantees: each agent wrote into
+the role's layout, ran nothing, and left the execution to the user. What varied
+is what the package does not fix: the split strategy, the choice of figures, and
+how closely each agent followed every convention. The decision logs made those
+choices auditable after the fact, and the separate folders kept the runs from
+overwriting each other. The reproducible point is the workflow and the audit
+gate, not a ranking of coders.
 
 ## Roles in this version
 
