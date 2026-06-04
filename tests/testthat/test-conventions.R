@@ -14,6 +14,12 @@ test_that("scaffold_layout creates the declared folders when create = TRUE", {
   }
 })
 
+test_that("scaffold_layout creates the universal logs directory", {
+  proj <- make_fake_project()
+  scaffold_layout("statistician", proj, create = TRUE)
+  expect_true(dir.exists(file.path(proj, "logs")))
+})
+
 test_that("scaffold_layout is idempotent", {
   proj <- make_fake_project()
   scaffold_layout("statistician", proj, create = TRUE)

@@ -103,12 +103,21 @@ harness_path <- function(name) {
 }
 
 # Read and normalise a harness YAML into a plain list. No validation here.
+# A universal `logs` directory is injected into every role's layout so that the
+# decision-log convention applies to all roles, including ones contributed
+# later, without each YAML declaring it.
 read_harness_yaml <- function(path) {
   raw <- yaml::read_yaml(path)
   raw$skills <- as_character_vector(raw$skills)
   raw$quality_gates <- as_character_vector(raw$quality_gates)
   raw$deps_check <- as_character_vector(raw$deps_check)
   raw$optional_deps <- as_character_vector(raw$optional_deps)
+  if (is.null(raw$layout)) {
+    raw$layout <- list()
+  }
+  if (is.null(raw$layout$logs)) {
+    raw$layout$logs <- "logs"
+  }
   raw
 }
 

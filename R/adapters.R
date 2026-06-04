@@ -81,7 +81,9 @@ harness_config_block <- function(h, project_dir, skills_linked, prompt_rel) {
   )
 }
 
-# The role prompt body, including the manual-execution policy.
+# The role prompt body, including the manual-execution policy and the
+# decision-log convention. Both sections are appended to every role's own
+# system prompt, so they hold for all roles and all adapters.
 harness_prompt_body <- function(h) {
   paste0(
     "# Harness: ", h$name, "\n\n",
@@ -89,7 +91,19 @@ harness_prompt_body <- function(h) {
     "## Execution policy\n\n",
     "Execution of generated code is manual. Write scripts to the layout ",
     "folders; do not call `source()`, `Rscript`, `system()` or any ",
-    "autonomous execution. The user runs every script.\n"
+    "autonomous execution. The user runs every script.\n\n",
+    "## Decision log\n\n",
+    "Keep a decision log. For every step you take, write one Markdown file to ",
+    "`logs/`, named `<YYYY-MM-DD>_<NN>_<slug>.md`, where `<NN>` is the ",
+    "zero-padded step number. Each file has exactly three sections:\n\n",
+    "- `## Decision`: what you chose to do in this step.\n",
+    "- `## Justification`: why, including the alternatives considered and why ",
+    "they were set aside.\n",
+    "- `## Result`: what the step produced, listing the files written. Leave a ",
+    "final line `Run outcome:` to be filled in after the user runs the script, ",
+    "since execution is manual.\n\n",
+    "Write one file per step, never overwrite or delete an earlier entry, and ",
+    "number steps in order. The log is part of the audit trail.\n"
   )
 }
 

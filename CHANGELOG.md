@@ -55,6 +55,14 @@ Added:
   `reproducibility-engineer`, `bioinformatician` and `performance-engineer`. The
   `performance-engineer` harness wires the autoresearch propose-validate-iterate
   loop with a hard output-equivalence gate.
+- Universal decision-log convention. Every role, including roles contributed
+  later, instructs the agent to write one Markdown file per step to `logs/` with
+  `Decision`, `Justification` and `Result` sections, and the `logs/` directory
+  is injected into every layout and scaffolded. The convention is added centrally
+  to the prompt body and the layout, not per YAML.
+- `role_skills()` to list a role's skills, optionally flagged by presence in the
+  community-skills checkout, and `role_config()` to print a role's full
+  configuration including the system prompt and the source YAML path.
 - Coder binary discovery resolves npm-global and node version-manager bins (nvm,
   fnm) and falls back to a login or interactive shell probe, so the adapters are
   found under the trimmed PATH of an RStudio session. Discovered paths are not

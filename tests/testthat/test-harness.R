@@ -29,6 +29,21 @@ test_that("caveat 2 is structural: every harness pins manual execution", {
   }
 })
 
+test_that("every role carries the universal logs directory", {
+  for (nm in available_roles()) {
+    h <- role(nm)
+    expect_identical(as.character(h$layout$logs), "logs")
+  }
+})
+
+test_that("the role prompt body includes the decision-log convention", {
+  body <- harness_prompt_body(role("data-scientist"))
+  expect_match(body, "Decision log")
+  expect_match(body, "## Decision")
+  expect_match(body, "## Justification")
+  expect_match(body, "## Result")
+})
+
 test_that("validate_harness rejects a missing required field", {
   bad <- list(name = "x", version = "0.1.0", description = "d",
               skills = "dplyr", system_prompt = "p",

@@ -203,6 +203,16 @@ time, any harness that does not. The system prompt of each role instructs the
 agent to write scripts into the role's layout folders and to leave execution to
 the user. The agent writes, the user runs.
 
+## Decision log
+
+Every role, including roles contributed later, carries a decision-log
+convention. The agent writes one Markdown file per step to `logs/`, named
+`<YYYY-MM-DD>_<NN>_<slug>.md`, with three sections: `Decision`, `Justification`
+and `Result`. The `Result` section lists the files written and leaves a line for
+the run outcome, filled after the user runs the script. The `logs/` directory is
+scaffolded for every role and the entries form an audit trail that pairs each
+generated artifact with the reasoning behind it.
+
 ## License
 
 MIT, see [LICENSE](LICENSE).
