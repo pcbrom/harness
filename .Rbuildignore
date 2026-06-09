@@ -13,3 +13,4 @@
 ^.*\.tar\.gz$
 ^CRAN-SUBMISSION$
 ^\.zenodo\.json$
+^ROADMAP\.md$
