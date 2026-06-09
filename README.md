@@ -1,5 +1,6 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/harness)](https://CRAN.R-project.org/package=harness)
 [![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/harness)](https://cran.r-project.org/package=harness)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20615125.svg)](https://doi.org/10.5281/zenodo.20615125)
 [![r-universe](https://pcbrom.r-universe.dev/badges/harness)](https://pcbrom.r-universe.dev/harness)
 [![R-CMD-check](https://github.com/pcbrom/harness/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pcbrom/harness/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
@@ -437,6 +438,24 @@ and `Result`. The `Result` section lists the files written and leaves a line for
 the run outcome, filled after the user runs the script. The `logs/` directory is
 scaffolded for every role and the entries form an audit trail that pairs each
 generated artifact with the reasoning behind it.
+
+## Citation
+
+To cite this release, use the version DOI:
+
+``` bibtex
+@software{carvalhobrom_harness_2026,
+  title   = {harness: Curated Agentic Harnesses for R Professional Roles (v0.1.0)},
+  author  = {Carvalho Brom, Pedro},
+  year    = {2026},
+  doi     = {10.5281/zenodo.20615126},
+  url     = {https://doi.org/10.5281/zenodo.20615126},
+  note    = {R package version 0.1.0}
+}
+```
+
+The concept DOI [10.5281/zenodo.20615125](https://doi.org/10.5281/zenodo.20615125)
+always resolves to the latest version.
 
 ## License
 

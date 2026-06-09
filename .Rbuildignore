@@ -12,3 +12,4 @@
 ^harness\.Rcheck$
 ^.*\.tar\.gz$
 ^CRAN-SUBMISSION$
+^\.zenodo\.json$
