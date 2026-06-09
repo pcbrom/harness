@@ -13,6 +13,9 @@ find_binary <- function(name, extra_paths = character()) {
   if (nzchar(hit)) {
     return(hit)
   }
+  if (.Platform$OS.type == "windows") {
+    return(find_binary_windows(name, extra_paths))
+  }
   home <- path.expand("~")
   candidates <- c(
     extra_paths,
@@ -36,6 +39,57 @@ find_binary <- function(name, extra_paths = character()) {
     }
   }
   find_binary_via_login_shell(name)
+}
+
+# Locate a coder binary on Windows. The npm global prefix, the node version
+# managers (nvm-windows, fnm), scoop and winget install their shims outside the
+# PATH the R process inherits. Each candidate is tried with the Windows
+# executable extensions, then `where` is asked, which honours PATHEXT and finds
+# .cmd and .exe shims that Sys.which can miss.
+find_binary_windows <- function(name, extra_paths = character()) {
+  exts <- c("", ".cmd", ".exe", ".bat", ".ps1")
+  appdata <- Sys.getenv("APPDATA")
+  localappdata <- Sys.getenv("LOCALAPPDATA")
+  allusers <- Sys.getenv("ALLUSERSPROFILE")
+  home <- path.expand("~")
+  dirs <- c(
+    extra_paths,
+    if (nzchar(appdata)) file.path(appdata, "npm"),
+    if (nzchar(localappdata)) {
+      file.path(localappdata, "Microsoft", "WinGet", "Links")
+    },
+    file.path(home, "scoop", "shims"),
+    if (nzchar(allusers)) file.path(allusers, "scoop", "shims"),
+    if (nzchar(appdata)) rev(Sys.glob(file.path(appdata, "nvm", "v*"))),
+    if (nzchar(localappdata)) {
+      rev(Sys.glob(file.path(localappdata, "fnm", "node-versions", "*",
+                             "installation")))
+    }
+  )
+  dirs <- dirs[nzchar(dirs)]
+  for (d in dirs) {
+    for (ext in exts) {
+      cand <- file.path(d, paste0(name, ext))
+      if (file.exists(cand)) {
+        return(cand)
+      }
+    }
+  }
+  find_binary_via_where(name)
+}
+
+# Ask the Windows `where` command for the binary path. It honours PATHEXT, so
+# it resolves .cmd and .exe shims. Silent on any failure.
+find_binary_via_where <- function(name) {
+  out <- tryCatch(
+    suppressWarnings(system2("where", name, stdout = TRUE, stderr = FALSE)),
+    error = function(e) character()
+  )
+  out <- out[nzchar(out)]
+  if (length(out) >= 1L && file.exists(out[1])) {
+    return(out[1])
+  }
+  NA_character_
 }
 
 # Ask the user's shell for the binary path. PATH entries from version managers
@@ -96,6 +150,13 @@ is_rstudio_terminal <- function() {
 
 # Detect an external terminal emulator for the headless fallback path.
 find_terminal_emulator <- function() {
+  if (.Platform$OS.type == "windows") {
+    wt <- find_binary("wt")
+    if (!is.na(wt)) {
+      return(list(name = "wt", launch = wt))
+    }
+    return(list(name = "cmd", launch = "cmd"))
+  }
   if (identical(Sys.info()[["sysname"]], "Darwin")) {
     return(list(name = "open", launch = "open"))
   }

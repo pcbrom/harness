@@ -1,3 +1,15 @@
+# harness 0.1.1
+
+Windows support for binary discovery and terminal launch.
+
+* `find_binary()` searches the Windows install locations (the npm global prefix,
+  nvm-windows and fnm node bins, scoop and winget shims) and asks `where`, which
+  honours PATHEXT and resolves the `.cmd` and `.exe` shims that `Sys.which()` can
+  miss.
+* `launch()` opens an external terminal on Windows through Windows Terminal
+  (`wt`) or `cmd`, and inside RStudio it uses a Command Prompt terminal with
+  Windows-style quoting for the directory change and the coder command.
+
 # harness 0.1.0
 
 First release.

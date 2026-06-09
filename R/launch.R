@@ -89,24 +89,41 @@ launch <- function(adapter = "claude", role, project_dir = getwd(),
 
 # Open a terminal running the coder. Returns the spawn method and status.
 spawn_terminal <- function(bin, args, project_dir, adapter, role) {
-  shell_cmd <- paste(c(shQuote(bin), args), collapse = " ")
-
   if (is_rstudio_terminal()) {
     caption <- unique_terminal_caption(paste0("harness:", adapter, ":", role))
-    id <- rstudioapi::terminalCreate(caption = caption, show = TRUE)
-    rstudioapi::terminalSend(id, paste0("cd ", shQuote(project_dir), "\n"))
-    rstudioapi::terminalSend(id, paste0(shell_cmd, "\n"))
+    if (.Platform$OS.type == "windows") {
+      # A Command Prompt terminal quotes the cd and the .cmd coder shim
+      # deterministically, and the npm and nvm shims run in cmd.
+      id <- tryCatch(
+        rstudioapi::terminalCreate(caption = caption, show = TRUE,
+                                   shellType = "win-cmd"),
+        error = function(e) {
+          rstudioapi::terminalCreate(caption = caption, show = TRUE)
+        }
+      )
+      cmd_line <- paste(c(shQuote(bin, type = "cmd"), args), collapse = " ")
+      rstudioapi::terminalSend(
+        id, paste0("cd /d ", shQuote(project_dir, type = "cmd"), "\n")
+      )
+      rstudioapi::terminalSend(id, paste0(cmd_line, "\n"))
+    } else {
+      shell_cmd <- paste(c(shQuote(bin), args), collapse = " ")
+      id <- rstudioapi::terminalCreate(caption = caption, show = TRUE)
+      rstudioapi::terminalSend(id, paste0("cd ", shQuote(project_dir), "\n"))
+      rstudioapi::terminalSend(id, paste0(shell_cmd, "\n"))
+    }
     return(list(spawned = TRUE, method = "rstudio", message = ""))
   }
 
   emulator <- find_terminal_emulator()
   if (!is.null(emulator)) {
-    ok <- spawn_external(emulator, shell_cmd, project_dir)
+    ok <- spawn_external(emulator, bin, args, project_dir)
     if (ok) {
       return(list(spawned = TRUE, method = emulator$name, message = ""))
     }
   }
 
+  shell_cmd <- paste(c(shQuote(bin), args), collapse = " ")
   list(
     spawned = FALSE,
     method = "manual",
@@ -145,9 +162,25 @@ unique_terminal_caption <- function(base) {
 
 # Spawn the coder in an external terminal emulator, detached. Returns TRUE on a
 # successful launch dispatch.
-spawn_external <- function(emulator, shell_cmd, project_dir) {
+spawn_external <- function(emulator, bin, args, project_dir) {
+  if (.Platform$OS.type == "windows") {
+    coder <- paste(c(shQuote(bin, type = "cmd"), args), collapse = " ")
+    ext_args <- if (identical(emulator$name, "wt")) {
+      c("-d", project_dir, "cmd", "/k", coder)
+    } else {
+      c("/c", "start", "", "cmd", "/k",
+        paste0("cd /d ", shQuote(project_dir, type = "cmd"), " && ", coder))
+    }
+    status <- tryCatch(
+      system2(emulator$launch, ext_args, stdout = FALSE, stderr = FALSE,
+              wait = FALSE),
+      error = function(e) 127L
+    )
+    return(identical(as.integer(status), 0L) || is.null(status))
+  }
+  shell_cmd <- paste(c(shQuote(bin), args), collapse = " ")
   inner <- paste0("cd ", shQuote(project_dir), "; ", shell_cmd, "; exec ${SHELL:-bash}")
-  args <- switch(
+  ext_args <- switch(
     emulator$name,
     "gnome-terminal" = c("--", "bash", "-lc", shQuote(inner)),
     "konsole" = c("-e", "bash", "-lc", shQuote(inner)),
@@ -157,7 +190,7 @@ spawn_external <- function(emulator, shell_cmd, project_dir) {
     c("-e", "bash", "-lc", shQuote(inner))
   )
   status <- tryCatch(
-    system2(emulator$launch, args, stdout = FALSE, stderr = FALSE, wait = FALSE),
+    system2(emulator$launch, ext_args, stdout = FALSE, stderr = FALSE, wait = FALSE),
     error = function(e) 127L
   )
   identical(as.integer(status), 0L) || is.null(status)

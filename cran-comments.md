@@ -1,21 +1,22 @@
 ## Submission
 
-This is a new submission.
+This is an update of a CRAN package (0.1.0 to 0.1.1). It adds Windows support
+for binary discovery and terminal launch. There are no user-facing API changes.
 
 ## Test environments
 
 - local: Ubuntu 24.04, R 4.6.0
+- GitHub Actions: ubuntu-latest, macos-latest, windows-latest (R release)
 - win-builder: R-devel and R-release (Windows)
 
 ## R CMD check results
 
 0 errors | 0 warnings | 1 note.
 
-The note is "New submission", expected for a first submission to CRAN. On
-win-builder the same note also lists possibly misspelled words in DESCRIPTION:
-"Agentic", "bootstrapper" and "pre". All three are intended: "Agentic" and
-"bootstrapper" describe what the package is, and "pre" is the prefix of
-"pre-configured". There is no other note, warning or error.
+The note lists possibly misspelled words in DESCRIPTION: "Agentic",
+"bootstrapper" and "pre". All three are intended: "Agentic" and "bootstrapper"
+describe what the package is, and "pre" is the prefix of "pre-configured".
+There is no other note, warning or error.
 
 ## Notes for the CRAN team
 
