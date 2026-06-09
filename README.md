@@ -439,6 +439,11 @@ keyboard shortcut through Tools, Modify Keyboard Shortcuts, Addins; then select
 code, press the shortcut, type a note, and the message lands in the coder's
 prompt.
 
+RStudio registers addins at startup, so after installing or updating the package
+restart RStudio for the addin to appear. The keyboard shortcut is set once,
+through Tools, Modify Keyboard Shortcuts, Addins; it is stored in the RStudio
+configuration and persists across sessions and reinstalls.
+
 The addin forwards text the user wrote; it does not run an agent loop and does
 not call a language model. It needs RStudio and an open harness terminal.
 
