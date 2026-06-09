@@ -1,3 +1,5 @@
+[![CRAN status](https://www.r-pkg.org/badges/version/harness)](https://CRAN.R-project.org/package=harness)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/harness)](https://cran.r-project.org/package=harness)
 [![r-universe](https://pcbrom.r-universe.dev/badges/harness)](https://pcbrom.r-universe.dev/harness)
 [![R-CMD-check](https://github.com/pcbrom/harness/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pcbrom/harness/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
@@ -60,7 +62,13 @@ for the work at hand.
 
 ## Installation
 
-The package is distributed through r-universe:
+Install the released version from CRAN:
+
+``` r
+install.packages("harness")
+```
+
+The latest build is also on r-universe:
 
 ``` r
 install.packages("harness",
@@ -68,7 +76,7 @@ install.packages("harness",
                            "https://cloud.r-project.org"))
 ```
 
-The development version can also be installed from GitHub:
+The development version can be installed from GitHub:
 
 ``` r
 # install.packages("devtools")
