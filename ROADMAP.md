@@ -6,6 +6,8 @@ fixed; the order reflects priority.
 
 ## 0.1.1: Windows support for binary discovery and terminal launch
 
+Tracked in [#3](https://github.com/pcbrom/harness/issues/3) (milestone 0.1.1).
+
 The 0.1.0 binary discovery and terminal launch are tuned for Linux and macOS.
 The package loads and passes R CMD check on Windows (confirmed on the CRAN
 Windows flavor and on win-builder), but the discovery and the external-terminal
@@ -27,6 +29,8 @@ already compatible; the work is specific to Windows.
   GitHub Actions workflow.
 
 ## 0.2.0: editor bridge (RStudio addin)
+
+Tracked in [#4](https://github.com/pcbrom/harness/issues/4) (milestone 0.2.0).
 
 An RStudio addin that sends the editor selection to the coder running in the
 harness terminal tab. It does not run an agent loop and does not call a language
@@ -61,7 +65,9 @@ experimental, depending on bracketed paste, or route it through a
 - Adapters `aider` and `gemini-cli`, to complete the five coders planned for the
   line. Each is an R file in `R/adapter_<coder>.R` exposing `find_binary`,
   `build_config` and `terminal_command`, following the claude, opencode and codex
-  adapters.
+  adapters. Tracked in [#1](https://github.com/pcbrom/harness/issues/1) and
+  [#2](https://github.com/pcbrom/harness/issues/2), labelled help wanted and good
+  first issue.
 - `sessions()` indexer: list the session logs under `logs/` (or the role's
   equivalent), reading the decision-log files.
 - Vignettes: getting-started, harness-anatomy, audit-first-workflow and
