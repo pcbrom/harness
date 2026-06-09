@@ -1,6 +1,6 @@
 Package: harness
 Title: Curated Agentic Harnesses for R Professional Roles
-Version: 0.1.0
+Version: 0.1.1
 Authors@R:
     person("Pedro", "Carvalho Brom", , "pcbrom@gmail.com",
            role = c("aut", "cre", "cph"),
