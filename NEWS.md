@@ -1,3 +1,18 @@
+# harness 0.2.0
+
+Editor bridge and the Windows support from the development line.
+
+* New RStudio addin `send_selection_to_coder()`: it reads the editor selection,
+  asks for a short note, and sends the note with a `file:line` reference to the
+  coder running in the harness terminal that `launch()` opened. Bind it to a
+  keyboard shortcut through Tools, Modify Keyboard Shortcuts, Addins. The addin
+  forwards text the user wrote; it does not run an agent loop and does not call a
+  language model. It needs no new dependency.
+* `launch()` records the terminal it opens, so the addin targets it; when the
+  record is stale, the addin finds a harness terminal by its caption.
+* Includes the Windows support for binary discovery and terminal launch listed
+  under 0.1.1.
+
 # harness 0.1.1
 
 Windows support for binary discovery and terminal launch.

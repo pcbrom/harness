@@ -1,0 +1,4 @@
+Name: Send selection to coder
+Description: Send the editor selection and a note to the harness coder terminal.
+Binding: send_selection_to_coder
+Interactive: true

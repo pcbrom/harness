@@ -112,6 +112,7 @@ spawn_terminal <- function(bin, args, project_dir, adapter, role) {
       rstudioapi::terminalSend(id, paste0("cd ", shQuote(project_dir), "\n"))
       rstudioapi::terminalSend(id, paste0(shell_cmd, "\n"))
     }
+    harness_register_terminal(id, caption, adapter, role)
     return(list(spawned = TRUE, method = "rstudio", message = ""))
   }
 
