@@ -186,6 +186,7 @@ preparing the environment and the catalogue, and launching a coder.
 | `scaffold_layout(name, dir, create =)` | create the role's folder layout |
 | `adapters()` | registered coder names |
 | `launch(adapter, role, ...)` | open the coder in a terminal tab |
+| `send_selection_to_coder()` | RStudio addin: send the editor selection and a note to the coder terminal |
 
 ### Discovering roles and skills
 
@@ -428,6 +429,18 @@ Every harness pins `execution_policy: manual`. The package rejects, at load
 time, any harness that does not. The system prompt of each role instructs the
 agent to write scripts into the role's layout folders and to leave execution to
 the user. The agent writes, the user runs.
+
+## Editor bridge (RStudio addin)
+
+Inside RStudio, `send_selection_to_coder()` reads the current editor selection,
+asks for a short note, and sends the note with a `file:line` reference to the
+coder running in the harness terminal that `launch()` opened. Bind it to a
+keyboard shortcut through Tools, Modify Keyboard Shortcuts, Addins; then select
+code, press the shortcut, type a note, and the message lands in the coder's
+prompt.
+
+The addin forwards text the user wrote; it does not run an agent loop and does
+not call a language model. It needs RStudio and an open harness terminal.
 
 ## Decision log
 
