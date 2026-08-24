@@ -1,22 +1,25 @@
 ## Submission
 
-This is an update of a CRAN package (0.1.0 to 0.1.1). It adds Windows support
-for binary discovery and terminal launch. There are no user-facing API changes.
+This is an update of a CRAN package (0.1.0 to 0.2.0). It adds an RStudio addin,
+`send_selection_to_coder()`, that forwards the editor selection with a file:line
+reference to the coder running in the harness terminal, and it folds in the
+Windows support for binary discovery and terminal launch from the development
+line. The addin forwards text the user wrote; it does not run an agent loop and
+does not call a language model. There are no removals from the public API.
 
 ## Test environments
 
-- local: Ubuntu 24.04, R 4.6.0
+- local: Ubuntu 24.04, R 4.6.1
 - GitHub Actions: ubuntu-latest, macos-latest, windows-latest (R release)
-- win-builder: R-devel and R-release (Windows)
+- win-builder: R-release 4.6.1 and R-devel (2026-08-22 r90443), both Windows
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note.
+0 errors | 0 warnings | 0 notes.
 
-The note lists possibly misspelled words in DESCRIPTION: "Agentic",
-"bootstrapper" and "pre". All three are intended: "Agentic" and "bootstrapper"
-describe what the package is, and "pre" is the prefix of "pre-configured".
-There is no other note, warning or error.
+Both win-builder runs report `Status: OK`. The local check adds one note only
+because HTML Tidy is absent on that machine, so the HTML validation step is
+skipped; it does not reflect the package.
 
 ## Notes for the CRAN team
 
