@@ -9,9 +9,7 @@ copy and is not shipped in the tarball.
 
 Nothing yet.
 
-## [0.2.0]
-
-Dated once the release is published.
+## [0.2.0] - 2026-08-24
 
 ### Added
 
