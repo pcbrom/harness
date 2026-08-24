@@ -8,9 +8,6 @@
 
 # harness
 
-<!-- badges: start -->
-<!-- badges: end -->
-
 `harness` launches a command-line coding agent of your choice in a terminal tab
 pre-configured for a professional R role. A role is described by a curated
 harness: a subset of community skills, a system prompt, a folder layout, and
@@ -397,8 +394,7 @@ gate, not a ranking of coders.
 
 ## Roles in this version
 
-Seventeen curated harnesses ship in the current development version. List them
-with `role_list()`:
+Seventeen curated harnesses ship with the package. List them with `role_list()`:
 
 | Role | Focus |
 |---|---|
@@ -459,21 +455,23 @@ generated artifact with the reasoning behind it.
 
 ## Citation
 
-To cite this release, use the version DOI:
+Cite the package through its concept DOI, which always resolves to the latest
+release:
 
 ``` bibtex
 @software{carvalhobrom_harness_2026,
-  title   = {harness: Curated Agentic Harnesses for R Professional Roles (v0.1.0)},
+  title   = {harness: Curated Agentic Harnesses for R Professional Roles},
   author  = {Carvalho Brom, Pedro},
   year    = {2026},
-  doi     = {10.5281/zenodo.20615126},
-  url     = {https://doi.org/10.5281/zenodo.20615126},
-  note    = {R package version 0.1.0}
+  doi     = {10.5281/zenodo.20615125},
+  url     = {https://doi.org/10.5281/zenodo.20615125},
+  note    = {R package}
 }
 ```
 
-The concept DOI [10.5281/zenodo.20615125](https://doi.org/10.5281/zenodo.20615125)
-always resolves to the latest version.
+When the exact release matters, cite the version DOI of that release instead;
+each one is listed on the
+[Zenodo record](https://doi.org/10.5281/zenodo.20615125).
 
 ## License
 
