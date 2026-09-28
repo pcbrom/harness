@@ -103,9 +103,9 @@ spawn_terminal <- function(bin, args, project_dir, adapter, role) {
       )
       cmd_line <- paste(c(shQuote(bin, type = "cmd"), args), collapse = " ")
       rstudioapi::terminalSend(
-        id, paste0("cd /d ", shQuote(project_dir, type = "cmd"), "\n")
+        id, paste0("cd /d ", shQuote(project_dir, type = "cmd"), "\r")
       )
-      rstudioapi::terminalSend(id, paste0(cmd_line, "\n"))
+      rstudioapi::terminalSend(id, paste0(cmd_line, "\r"))
     } else {
       shell_cmd <- paste(c(shQuote(bin), args), collapse = " ")
       id <- rstudioapi::terminalCreate(caption = caption, show = TRUE)
